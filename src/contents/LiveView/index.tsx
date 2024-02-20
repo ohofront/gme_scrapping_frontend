@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Params } from "../../models/api/apiModel";
 import axios from "axios";
 import { Response } from "http-proxy-middleware/dist/types";
+import SelectBox from "../../component/SelectBox";
 
 export const InitialParams: Params = {
   startDttm: "2024-02-15 10:00:00",
@@ -15,6 +16,12 @@ const LiveView = () => {
   const [param, setParam] = useState<Params>(InitialParams);
   const [live, setLive] = useState<Response[]>([]);
   const apiUrl = process.env.REACT_APP_SERVICE_URL;
+  const selectData = [
+    { key: 1, value: "BDP01" },
+    { key: 2, value: "BPM01" },
+    { key: 3, value: "BDP01(USD)" },
+    { key: 4, value: "BPM01(USD)" },
+  ];
 
   useEffect(() => {
     setParam({
@@ -32,18 +39,6 @@ const LiveView = () => {
   //   })();
   // }, [param]);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${apiUrl}/GME/gme_scrap/pivot/history`,
-        { params: param }
-      );
-      console.log("response: ", response.data);
-      setLive(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,11 +53,9 @@ const LiveView = () => {
       }
     };
     fetchData();
+    console.log("live:", live);
   }, []);
 
-  useEffect(() => {
-    console.log("live:", live);
-  }, [live]);
-  return <div>라이브뷰</div>;
+  return <SelectBox optionData={selectData} />;
 };
 export default LiveView;
