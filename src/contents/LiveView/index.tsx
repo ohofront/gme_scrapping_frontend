@@ -4,6 +4,12 @@ import { Params } from "../../models/api/apiModel";
 import axios from "axios";
 import { Response } from "http-proxy-middleware/dist/types";
 import SelectBox from "../../component/SelectBox";
+import styled from "styled-components";
+import { DataTable } from "../../component/DataTable";
+import { ListViewDummy } from "../../dummy/LiveView";
+import { View } from "../../models/view/viewModel";
+import { headers, items } from "../../dummy/DataTable";
+import BarChart from "../../component/BarChart";
 
 export const InitialParams: Params = {
   startDttm: "2024-02-15 10:00:00",
@@ -56,6 +62,53 @@ const LiveView = () => {
     console.log("live:", live);
   }, []);
 
-  return <SelectBox optionData={selectData} />;
+  return (
+    <MainWrapper>
+         <SelectBox optionData={selectData} />
+          <TableWrapper>
+             <DataTable headers={headers} items={items} selectable={false}/>
+          </TableWrapper>
+          <ChartWrapper>    
+             {ListViewDummy.map((item: View ,index: number) => {
+              return(
+               <Content key={index}>
+                 <BarChart props={item}/>
+               </Content>
+               )
+             }
+           )}     
+          </ChartWrapper>
+        </MainWrapper>
+  )
 };
 export default LiveView;
+
+const MainWrapper = styled.div`
+  display: flex;
+  width: 100%;
+`
+const TableWrapper = styled.div`
+  width: 50%;
+  height: 200px;
+  float: left;
+`;
+
+const ChartWrapper = styled.div`
+  margin: 50px 10px;
+  width: 100%;
+  height: 100%;
+  background-color:#fff;
+  float: right;
+  display: grid;
+  grid-template-columns: 600px 600px;
+  grid-column-gap: 50px;
+`;
+
+const Content = styled.div`
+  padding: 10px;
+  border-radius:10px;
+  color: #fff;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+`;
