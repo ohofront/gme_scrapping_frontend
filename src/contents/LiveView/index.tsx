@@ -64,7 +64,7 @@ const LiveView = () => {
 
   return (
     <MainWrapper>
-         <SelectBox optionData={selectData} />
+         {/* <SelectBox optionData={selectData} /> */}
           <TableWrapper>
              <DataTable headers={headers} items={items} selectable={false}/>
           </TableWrapper>
@@ -86,6 +86,7 @@ export default LiveView;
 const MainWrapper = styled.div`
   display: flex;
   width: 100%;
+  padding: 50px;
 `
 const TableWrapper = styled.div`
   width: 50%;
