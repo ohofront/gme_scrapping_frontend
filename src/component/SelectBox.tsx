@@ -2,9 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 
 type DropdownProps = {
+  defaultTitle?: string;
   optionData: { key: number; value: string }[];
 };
-const SelectBox = ({ optionData }: DropdownProps) => {
+const SelectBox = ({ defaultTitle, optionData }: DropdownProps) => {
   const [currentValue, setCurrentValue] = useState(optionData[0].value);
   const [showOptions, setShowOptions] = useState(false);
 
@@ -13,29 +14,55 @@ const SelectBox = ({ optionData }: DropdownProps) => {
   };
 
   return (
-    <SelectedBox onClick={() => setShowOptions((prev) => !prev)}>
-      <Label>{currentValue}</Label>
-      <SelectOptions show={showOptions}>
-        {optionData.map((data, index) => (
-          <Option
-            key={index}
-            value={data.value}
-            onClick={() => handleOnChangeSelectValue(data)}
-          >
-            {data.value}
-          </Option>
-        ))}
-      </SelectOptions>
-    </SelectedBox>
+    <SelectWrapper>
+        <SelectTitle>
+          {defaultTitle}
+        </SelectTitle>
+        <SelectedBox onClick={() => setShowOptions((prev) => !prev)}>
+          <Label>{currentValue}</Label>
+          <SelectOptions show={showOptions}>
+            {optionData.map((data, index) => (
+              <Option
+                key={index}
+                value={data.value}
+                onClick={() => handleOnChangeSelectValue(data)}
+              >
+                {data.value}
+              </Option>
+            ))}
+          </SelectOptions>
+        </SelectedBox>
+    </SelectWrapper>
   );
 };
 export default SelectBox;
+
+const SelectWrapper = styled.div`
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+`;
+
+const SelectTitle = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 17px;
+  padding-right: 15px;
+`;
 
 const SelectedBox = styled.div`
   display: flex;
   position: relative;
   width: 200px;
-  padding: 20px;
+  padding: 5px;
   border-radius: 12px;
   background-color: #ffffff;
   align-self: center;
@@ -44,10 +71,10 @@ const SelectedBox = styled.div`
   &::before {
     content: "⌵";
     position: absolute;
-    top: 0px;
-    right: 10px;
+    top: -10px;
+    right: 20px;
     color: #49c181;
-    font-size: 40px;
+    font-size: 30px;
   }
 `;
 const Label = styled.label`
@@ -59,7 +86,7 @@ type TSelectionProps = { show: boolean };
 const SelectOptions = styled.ul<TSelectionProps>`
   position: absolute;
   list-style: none;
-  top: 50px;
+  top: 30px;
   left: 0;
   width: 100%;
   overflow: hidden;

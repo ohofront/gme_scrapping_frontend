@@ -69,13 +69,24 @@ const LiveView = () => {
     <MainWrapper>
 
          <SearchBox>
-            <SelectBox optionData={selectData} />
+            <div className="right">
+              <SelectBox defaultTitle="송금유형" optionData={selectData} />
+            </div>
+            
+            
+            {/* <SelectBox2
+              defaultTitle="분류 선택"
+              optionList={[
+                { title: '애셋자료', value: 'Y' },
+                { title: '프로젝트 자료', value: 'N' },
+              ]}
+            /> */}
          </SearchBox>
 
          <ContentWrapper>
             <TableWrapper>
                 <DataTable headers={headers} items={items} selectable={false}/>
-             </TableWrapper>
+             </TableWrapper> 
              <ChartWrapper>    
                 {ListViewDummy.map((item: View ,index: number) => {
                  return(
@@ -94,7 +105,6 @@ const LiveView = () => {
 export default LiveView;
 
 const MainWrapper = styled.div`
-  display: flex;
   flex-direction: column;
   width: 100%;
   padding: 50px;
@@ -102,7 +112,6 @@ const MainWrapper = styled.div`
 const TableWrapper = styled.div`
   width: 50%;
   height: 200px;
-  float: left;
 `;
 
 const ChartWrapper = styled.div`
@@ -126,10 +135,19 @@ const Content = styled.div`
 `;
 
 const SearchBox = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  padding: 10px;
+  float: right;
+  width: 50%;
+  height: 141px;
+  gap: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  .right {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    flex-shrink: 0;
+    gap: 20px;
+  }
 `;
 
 const ContentWrapper = styled.div`
