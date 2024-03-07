@@ -41,38 +41,35 @@ const SelectWrapper = styled.div`
   display: flex;
   position: relative;
   box-sizing: border-box;
+  flex-direction: column;
 `;
 
 const SelectTitle = styled.div`
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  width: inherit;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
+  justify-content: center;
+  text-align: center;
   font-weight: 500;
   font-size: 20px;
-  line-height: 17px;
-  padding-right: 15px;
 `;
 
 const SelectedBox = styled.div`
   display: flex;
   position: relative;
   width: 200px;
-  padding: 5px;
+  height: 50px;
   border-radius: 12px;
   background-color: #ffffff;
-  align-self: center;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   &::before {
     content: "⌵";
     position: absolute;
-    top: -10px;
-    right: 20px;
+    top: 0px;
+    right: 10px;
     color: #49c181;
     font-size: 30px;
   }
@@ -81,6 +78,7 @@ const Label = styled.label`
   font-size: 20px;
   margin-left: 10px;
   text-align: center;
+  cursor: pointer;
 `;
 type TSelectionProps = { show: boolean };
 const SelectOptions = styled.ul<TSelectionProps>`

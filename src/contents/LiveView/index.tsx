@@ -10,6 +10,7 @@ import { ListViewDummy } from "../../dummy/LiveView";
 import { View } from "../../models/view/viewModel";
 import { headers, items } from "../../dummy/DataTable";
 import BarChart from "../../component/BarChart";
+import DateSelect from "../../component/DatePicker";
 
 export const InitialParams: Params = {
   startDttm: "2024-02-15 10:00:00",
@@ -21,6 +22,9 @@ export const InitialParams: Params = {
 const LiveView = () => {
   const [param, setParam] = useState<Params>(InitialParams);
   const [live, setLive] = useState<Response[]>([]);
+  const today = new Date();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const apiUrl = process.env.REACT_APP_SERVICE_URL;
   const selectData = [
     { key: 1, value: "BDP01" },
@@ -70,7 +74,8 @@ const LiveView = () => {
 
          <SearchBox>
             <div className="right">
-              <SelectBox defaultTitle="송금유형" optionData={selectData} />
+              <SelectBox defaultTitle="통화 코드" optionData={selectData} />
+              <DateSelect defaultTitle="기간" startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
             </div>
             
             
@@ -137,16 +142,12 @@ const Content = styled.div`
 const SearchBox = styled.div`
   float: right;
   width: 50%;
-  height: 141px;
-  gap: 10px;
+  height: 150px;
   display: inline-block;
   vertical-align: middle;
   .right {
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    flex-shrink: 0;
-    gap: 20px;
+    flex-direction: row;
   }
 `;
 
