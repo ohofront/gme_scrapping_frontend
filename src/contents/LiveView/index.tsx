@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { getLiveView } from "../../api/LiveView";
-import { Params } from "../../models/api/apiModel";
+import { Params, RemitMethodCode } from "../../models/api/apiModel";
 import axios from "axios";
 import { Response } from "http-proxy-middleware/dist/types";
 import SelectBox from "../../component/SelectBox";
@@ -11,10 +11,11 @@ import { View } from "../../models/view/viewModel";
 import { headers, items } from "../../dummy/DataTable";
 import BarChart from "../../component/BarChart";
 import DateSelect from "../../component/DatePicker";
+import Loading from "../../component/Loading";
 
 export const InitialParams: Params = {
-  startDttm: "2024-02-15 10:00:00",
-  endDttm: "2024-02-15 10:15:00",
+  startDttm: new Date(),
+  endDttm: new Date(),
   remitMethodCode: "BDP01",
   format: "json",
 };
@@ -22,9 +23,11 @@ export const InitialParams: Params = {
 const LiveView = () => {
   const [param, setParam] = useState<Params>(InitialParams);
   const [live, setLive] = useState<Response[]>([]);
-  const today = new Date();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [method, setMethod] = useState<RemitMethodCode>('BDP01');
+  const [loading, setLoading] = useState(true);
+  const timerRef = useRef(null);
   const apiUrl = process.env.REACT_APP_SERVICE_URL;
   const selectData = [
     { key: 1, value: "BDP01" },
@@ -35,13 +38,23 @@ const LiveView = () => {
 
   useEffect(() => {
     setParam({
-      startDttm: "2024-01-31 10:00:00",
-      endDttm: "2024-01-31 10:15:00",
-      remitMethodCode: "BDP01",
-      format: "json",
-    });
-  }, []);
+      startDttm: startDate,
+      endDttm: endDate,
+      remitMethodCode: method,
+      format: 'json'
+    })
+  },[startDate, endDate])
 
+  // useEffect(() => {
+  //   setParam({
+  //     startDttm: "2024-01-31 10:00:00",
+  //     endDttm: "2024-01-31 10:15:00",
+  //     remitMethodCode: "BDP01",
+  //     format: "json",
+  //   });
+  // }, []);
+
+  
   // useEffect(() => {
   //   (async () => {
   //     const response = await getLiveView(param);
@@ -49,47 +62,88 @@ const LiveView = () => {
   //   })();
   // }, [param]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${apiUrl}/GME/gme_scrap/pivot/history`,
-          { params: param }
-        );
-        console.log("response: ", response.data);
-        setLive(response.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchData();
-  }, []);
+  const fetch = async () => {
+    try {
+      const response = await axios.get(
+        `${apiUrl}/GME/gme_scrap/pivot/history`,
+        { params: param }
+      );
+      console.log("response: ", response.data);
+      setLive(response.data);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${apiUrl}/GME/gme_scrap/pivot/history`,
+  //         { params: param }
+  //       );
+  //       console.log("response: ", response.data);
+  //       setLive(response.data);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     console.log("live:", live);
   },[live])
 
+  useEffect(() => {
+    console.log("loading:", loading);
+  },[loading])
+  
+  useEffect(() => {
+    console.log("params:", param);
+  }, [param])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch();
+      setLoading(true);
+    }, 5000);
+    return() => clearInterval(interval);
+  }, [loading]);
+
+  // const handleRestart = () => {
+  //   if (!timerRef.current) {
+  //     timerRef.current = fetch();
+  //   }
+  // };
+
+  // const handleStop = () => {
+  //   if (timerRef.current) {
+  //     clearInterval(timerRef.current);
+  //     timerRef.current = null;
+  //   }
+  // };
+
   return (
     <MainWrapper>
 
+         {/* <button onClick={handleRestart}>restart</button> */}
+         {/* <button onClick={handleStop}>stop</button> */}
+         
          <SearchBox>
             <div className="right">
-              <SelectBox defaultTitle="통화 코드" optionData={selectData} />
+              <SelectBox defaultTitle="통화 코드" optionData={selectData} currentOption={method} />
               <DateSelect defaultTitle="기간" startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
             </div>
-            
-            
-            {/* <SelectBox2
-              defaultTitle="분류 선택"
-              optionList={[
-                { title: '애셋자료', value: 'Y' },
-                { title: '프로젝트 자료', value: 'N' },
-              ]}
-            /> */}
          </SearchBox>
 
          <ContentWrapper>
-            <TableWrapper>
+          {loading ? (
+            <Loading/>
+          ) : 
+            live.length > 0 ?
+             <>
+              <TableWrapper>
                 <DataTable headers={headers} items={items} selectable={false}/>
              </TableWrapper> 
              <ChartWrapper>    
@@ -101,7 +155,11 @@ const LiveView = () => {
                   )
                 }
               )}     
-             </ChartWrapper>
+             </ChartWrapper> 
+             </>
+             : null
+          }
+            
          </ContentWrapper>
 
     </MainWrapper>
