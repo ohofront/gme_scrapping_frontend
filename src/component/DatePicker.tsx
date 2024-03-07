@@ -14,7 +14,7 @@ interface DateSelectProps {
 
 const DateSelect = ({ defaultTitle, startDate, endDate, setStartDate, setEndDate}: DateSelectProps) => {
     registerLocale("ko", ko);
-    
+
     return (
         <DateSelectWrapper>
             <DateSelectTitle>
@@ -22,8 +22,11 @@ const DateSelect = ({ defaultTitle, startDate, endDate, setStartDate, setEndDate
             </DateSelectTitle>
             <SDateWrapper>
                <SDatePicker
-                 dateFormat={"yyyy년 MM월 dd일"}
+                 dateFormat={"yyyy년 MM월 dd일 HH:mm"}
                  locale="ko"
+                 showTimeSelect
+                 timeFormat="HH:mm"
+                 timeIntervals={20}
                  selected={startDate}
                  onChange={(date) => setStartDate(date)}
                  selectsStart
@@ -31,8 +34,11 @@ const DateSelect = ({ defaultTitle, startDate, endDate, setStartDate, setEndDate
                />
                 &nbsp;~&nbsp;
                 <SDatePicker
-                 dateFormat={"yyyy년 MM월 dd일"}
+                  dateFormat={"yyyy년 MM월 dd일 HH:mm"}
                  locale="ko"
+                 showTimeSelect
+                 timeFormat="HH:mm"
+                 timeIntervals={20}
                  selected={endDate}
                  onChange={(date) => setEndDate(date)}
                  selectsStart
