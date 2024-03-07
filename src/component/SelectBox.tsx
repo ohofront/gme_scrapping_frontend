@@ -4,8 +4,9 @@ import styled from "styled-components";
 type DropdownProps = {
   defaultTitle?: string;
   optionData: { key: number; value: string }[];
+  currentOption: string;
 };
-const SelectBox = ({ defaultTitle, optionData }: DropdownProps) => {
+const SelectBox = ({ defaultTitle, optionData, currentOption }: DropdownProps) => {
   const [currentValue, setCurrentValue] = useState(optionData[0].value);
   const [showOptions, setShowOptions] = useState(false);
 
@@ -24,7 +25,7 @@ const SelectBox = ({ defaultTitle, optionData }: DropdownProps) => {
             {optionData.map((data, index) => (
               <Option
                 key={index}
-                value={data.value}
+                value={currentOption}
                 onClick={() => handleOnChangeSelectValue(data)}
               >
                 {data.value}
