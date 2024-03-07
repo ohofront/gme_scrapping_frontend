@@ -59,32 +59,43 @@ const LiveView = () => {
       }
     };
     fetchData();
-    console.log("live:", live);
   }, []);
+
+  useEffect(() => {
+    console.log("live:", live);
+  },[live])
 
   return (
     <MainWrapper>
-         {/* <SelectBox optionData={selectData} /> */}
-          <TableWrapper>
-             <DataTable headers={headers} items={items} selectable={false}/>
-          </TableWrapper>
-          <ChartWrapper>    
-             {ListViewDummy.map((item: View ,index: number) => {
-              return(
-               <Content key={index}>
-                 <BarChart props={item}/>
-               </Content>
-               )
-             }
-           )}     
-          </ChartWrapper>
-        </MainWrapper>
+
+         <SearchBox>
+            <SelectBox optionData={selectData} />
+         </SearchBox>
+
+         <ContentWrapper>
+            <TableWrapper>
+                <DataTable headers={headers} items={items} selectable={false}/>
+             </TableWrapper>
+             <ChartWrapper>    
+                {ListViewDummy.map((item: View ,index: number) => {
+                 return(
+                  <Content key={index}>
+                    <BarChart props={item}/>
+                  </Content>
+                  )
+                }
+              )}     
+             </ChartWrapper>
+         </ContentWrapper>
+
+    </MainWrapper>
   )
 };
 export default LiveView;
 
 const MainWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
   padding: 50px;
 `
@@ -112,4 +123,17 @@ const Content = styled.div`
   display: flex;
   align-items:center;
   justify-content:center;
+`;
+
+const SearchBox = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  padding: 10px;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
 `;
