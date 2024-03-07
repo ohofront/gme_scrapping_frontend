@@ -1,8 +1,8 @@
 export type RemitMethodCode = "BDP01" | "BPM01" | "BDP01(USD)" | "BPM01(USD)";
 
 export type Params = {
-  startDttm: string;
-  endDttm: string;
+  startDttm: Date;
+  endDttm: Date;
   remitMethodCode: RemitMethodCode;
   format: string;
 };
