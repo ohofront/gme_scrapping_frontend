@@ -41,8 +41,14 @@ export default SelectBox;
 const SelectWrapper = styled.div`
   display: flex;
   position: relative;
+  width: 100%;
+  padding: 50px 0px;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   box-sizing: border-box;
-  flex-direction: column;
+  flex-direction: row;
 `;
 
 const SelectTitle = styled.div`
@@ -50,7 +56,7 @@ const SelectTitle = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 20px;
 `;
 
