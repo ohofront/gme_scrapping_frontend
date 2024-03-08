@@ -5,13 +5,14 @@ type DropdownProps = {
   defaultTitle?: string;
   optionData: { key: number; value: string }[];
   currentOption: string;
+  setCurrentOption: any;
 };
-const SelectBox = ({ defaultTitle, optionData, currentOption }: DropdownProps) => {
-  const [currentValue, setCurrentValue] = useState(optionData[0].value);
+const SelectBox = ({ defaultTitle, optionData, currentOption, setCurrentOption }: DropdownProps) => {
+  
   const [showOptions, setShowOptions] = useState(false);
 
   const handleOnChangeSelectValue = (data: { key: number; value: string }) => {
-    setCurrentValue(data.value);
+    setCurrentOption(data.value);
   };
 
   return (
@@ -20,7 +21,7 @@ const SelectBox = ({ defaultTitle, optionData, currentOption }: DropdownProps) =
           {defaultTitle}
         </SelectTitle>
         <SelectedBox onClick={() => setShowOptions((prev) => !prev)}>
-          <Label>{currentValue}</Label>
+          <Label>{currentOption}</Label>
           <SelectOptions show={showOptions}>
             {optionData.map((data, index) => (
               <Option

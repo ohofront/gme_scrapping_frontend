@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 // import { getLiveView } from "../../api/LiveView";
 import { Params, RemitMethodCode } from "../../models/api/apiModel";
 import axios from "axios";
@@ -44,7 +44,7 @@ const LiveView = () => {
       remitMethodCode: method,
       format: 'json'
     })
-  },[startDate, endDate])
+  },[startDate, endDate, method])
 
   // useEffect(() => {
   //   setParam({
@@ -108,7 +108,7 @@ const LiveView = () => {
     const interval = setInterval(() => {
       fetch();
       setLoading(true);
-    }, 5000);
+    }, 60000);
     return() => clearInterval(interval);
   }, [loading]);
 
@@ -118,22 +118,23 @@ const LiveView = () => {
   //   }
   // };
 
-  // const handleStop = () => {
-  //   if (timerRef.current) {
-  //     clearInterval(timerRef.current);
-  //     timerRef.current = null;
-  //   }
-  // };
-
+  const handleStop = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+  
   return (
     <MainWrapper>
 
          {/* <button onClick={handleRestart}>restart</button> */}
-         {/* <button onClick={handleStop}>stop</button> */}
-         
          <SearchBox>
+            <div className="left">
+               <SearchFunction defaultTitle="조회" />
+            </div>
             <div className="right">
-              <SelectBox defaultTitle="송금 코드" optionData={selectData} currentOption={method} />
+              <SelectBox defaultTitle="송금 코드" optionData={selectData} currentOption={method} setCurrentOption={setMethod} />
               <DateSelect defaultTitle="기간" startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
               <SearchFunction defaultTitle="조회" />
             </div>
@@ -207,12 +208,17 @@ const SearchBox = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
   margin-bottom: 100px;
+  .left {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 30%;
+    float: left;
+  }
   .right {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 0.3fr;
+    grid-template-columns: 1fr 1.5fr 0.5fr;
     width: 70%;
     float: right;
-    padding: 0px 150px;
   }
 `;
 
