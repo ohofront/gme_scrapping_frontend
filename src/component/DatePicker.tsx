@@ -54,9 +54,15 @@ export default DateSelect;
 
 const DateSelectWrapper = styled.div`
   display: flex;
+  position: relative;
+  width: 100%;
+  padding: 50px 0px;
+  gap: 10px;
   align-items: center;
-  width: 70%;
-  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+  flex-direction: row;
 `;
 
 const DateSelectTitle = styled.div`
@@ -64,7 +70,7 @@ const DateSelectTitle = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 20px;
 `;
 
@@ -78,7 +84,7 @@ const SDateWrapper = styled.div`
 `
 const SDatePicker = styled(DatePicker)`
   display: flex;
-  width: 250px;
+  width: 300px;
   height: 50px;
   align-items: center;
   justify-content: center;
