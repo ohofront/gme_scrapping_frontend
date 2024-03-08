@@ -12,6 +12,7 @@ import { headers, items } from "../../dummy/DataTable";
 import BarChart from "../../component/BarChart";
 import DateSelect from "../../component/DatePicker";
 import Loading from "../../component/Loading";
+import SearchFunction from "../../component/SearchFunction";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -132,8 +133,9 @@ const LiveView = () => {
          
          <SearchBox>
             <div className="right">
-              <SelectBox defaultTitle="통화 코드" optionData={selectData} currentOption={method} />
+              <SelectBox defaultTitle="송금 코드" optionData={selectData} currentOption={method} />
               <DateSelect defaultTitle="기간" startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+              <SearchFunction defaultTitle="조회" />
             </div>
          </SearchBox>
 
@@ -178,19 +180,19 @@ const TableWrapper = styled.div`
 `;
 
 const ChartWrapper = styled.div`
-  margin: 50px 10px;
+  margin: 50px 0px;
   width: 100%;
   height: 100%;
   background-color:#fff;
   float: right;
   display: grid;
   grid-template-columns: 600px 600px;
-  grid-column-gap: 50px;
+  grid-gap: 50px;
 `;
 
 const Content = styled.div`
   padding: 10px;
-  border-radius:10px;
+  border-radius: 10px;
   color: #fff;
   display: flex;
   align-items:center;
@@ -198,14 +200,19 @@ const Content = styled.div`
 `;
 
 const SearchBox = styled.div`
-  float: right;
-  width: 50%;
+  width: 100%;
   height: 150px;
-  display: inline-block;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
+  margin-bottom: 100px;
   .right {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 0.3fr;
+    width: 70%;
+    float: right;
+    padding: 0px 150px;
   }
 `;
 
