@@ -291,7 +291,6 @@ export default LiveView;
 const MainWrapper = styled.div`
   flex-direction: column;
   width: 100%;
-  padding: 50px;
 `
 const TableWrapper = styled.div`
   width: 50%;
@@ -299,7 +298,7 @@ const TableWrapper = styled.div`
 `;
 
 const ChartWrapper = styled.div`
-  margin: 50px 0px;
+  margin: 10px 0px;
   width: 100%;
   height: 100%;
   background-color:#fff;
@@ -310,7 +309,7 @@ const ChartWrapper = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 10px;
+  padding: 10px 10px;
   border-radius: 10px;
   color: #fff;
   display: flex;
@@ -325,7 +324,7 @@ const SearchBox = styled.div`
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
-  margin-bottom: 10px;
+  margin-bottom: 50px;
   .left {
     display: grid;
     // grid-template-columns: 1fr;

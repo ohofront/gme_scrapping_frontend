@@ -81,7 +81,7 @@ export const DataTable = ({
           )}
           {headers.map((header: any) => (
             <th
-              style={{ padding: 20,  border: "1px solid #ddd", }}
+              style={{ padding: 20,  border: "1px solid #ddd", fontSize: 25  }}
               key={header.text}
             >
               {header.text} {/* 컬럼명 바인딩 */}
@@ -113,7 +113,7 @@ export const DataTable = ({
             {headerKey.map((key: string) => (
               <td
                 key={key + index}
-                style={{ minWidth: "10px", textAlign: "center", border: "1px solid #ddd", }}
+                style={{ minWidth: "10px", textAlign: "center", border: "1px solid #ddd", fontSize: 25 }}
               >
                 {item[key]} {/* key로 객체의 값을 출력 */}
               </td>
