@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 // import { getLiveView } from "../../api/LiveView";
-import { Params, RemitMethodCode } from "../../models/api/apiModel";
+import { Params, RemitMethodCode, ResponseParams } from "../../models/api/apiModel";
 import axios from "axios";
-import { Response } from "http-proxy-middleware/dist/types";
 import SelectBox from "../../component/SelectBox";
 import styled from "styled-components";
 import { DataTable } from "../../component/DataTable";
@@ -13,6 +12,8 @@ import BarChart from "../../component/BarChart";
 import DateSelect from "../../component/DatePicker";
 import Loading from "../../component/Loading";
 import SearchFunction from "../../component/SearchFunction";
+import { Table } from "../../models/table/tableModel";
+import { currencyFormatter } from "../../function/currencyFormatter";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -23,7 +24,9 @@ export const InitialParams: Params = {
 
 const LiveView = () => {
   const [param, setParam] = useState<Params>(InitialParams);
-  const [live, setLive] = useState<Response[]>([]);
+  const [live, setLive] = useState<ResponseParams[]>([]);
+  const [chart, setChart] = useState<View[]>([]);
+  const [table, setTable] = useState<Table[]>([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>('BDP01');
@@ -46,6 +49,33 @@ const LiveView = () => {
     })
   },[startDate, endDate, method])
 
+  useEffect(() => {
+     const groupValues = live.reduce((acc: any, cur: any) => {
+      const countryIndex = acc.findIndex((item:any) => item.country  === cur.SentNation);
+      if( countryIndex === -1) {
+        acc.push({country: cur.SentNation, competitors: [{company: cur.SiteName, amount: cur.RecvAmt}]})
+      } else {
+        acc[countryIndex].competitors.push({company: cur.SiteName, amount: cur.RecvAmt})
+      }
+      return acc;
+     },[])
+     console.log("groupValues", groupValues);
+     setChart(groupValues);
+  },[live])
+  
+  useEffect(() => {
+    const tableValues = live.reduce((acc: any, cur: any) => {
+      const countryIndex = acc.findIndex((item:any) => item.country  === cur.SentNation);
+      if( countryIndex === -1) {
+        acc.push({country: cur.SentNation, company: cur.SiteName, amount: currencyFormatter(cur.RecvAmt)})
+      } else {
+        acc.push({country: cur.SentNation, company: cur.SiteName, amount: currencyFormatter(cur.RecvAmt)})
+      }
+      return acc;
+     },[])
+     console.log("tableValues", tableValues);
+     setTable(tableValues);
+  },[live])
   // useEffect(() => {
   //   setParam({
   //     startDttm: "2024-01-31 10:00:00",
@@ -92,23 +122,27 @@ const LiveView = () => {
   //   fetchData();
   // }, []);
 
-  useEffect(() => {
-    console.log("live:", live);
-  },[live])
+  // useEffect(() => {
+  //   console.log("live:", live);
+  // },[live])
 
-  useEffect(() => {
-    console.log("loading:", loading);
-  },[loading])
-  
-  useEffect(() => {
-    console.log("params:", param);
-  }, [param])
+  // useEffect(() => {
+  //   console.log("chart:", chart);
+  // },[chart])
+
+  // useEffect(() => {
+  //   console.log("table:", table);
+  // },[table])
+
+  // useEffect(() => {
+  //   console.log("params:", param);
+  // }, [param])
 
   useEffect(() => {
     const interval = setInterval(() => {
       fetch();
       setLoading(true);
-    }, 60000);
+    }, 10000);
     return() => clearInterval(interval);
   }, [loading]);
 
@@ -147,10 +181,10 @@ const LiveView = () => {
             live.length > 0 ?
              <>
               <TableWrapper>
-                <DataTable headers={headers} items={items} selectable={false}/>
+                <DataTable headers={headers} items={table} selectable={false}/>
              </TableWrapper> 
              <ChartWrapper>    
-                {ListViewDummy.map((item: View ,index: number) => {
+                {chart.map((item: View ,index: number) => {
                  return(
                   <Content key={index}>
                     <BarChart props={item}/>
