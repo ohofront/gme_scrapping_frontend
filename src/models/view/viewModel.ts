@@ -1,7 +1,6 @@
 export interface View {
   id: number;
   country: string;
-  changeUnit: ChangeUnit;
   competitors: Competitor[];
 }
 
