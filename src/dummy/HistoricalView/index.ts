@@ -5,10 +5,6 @@ export const defaultHistoricalViewDummy: View[] =[
     {
         id: 1,
         country: 'India',
-        changeUnit: {
-            amount: 100000,
-            unit: 'INR'
-        },
         competitors: [
             {
                 id: 1,
@@ -44,10 +40,6 @@ export const HistoricalListViewDummy: View[] = [
     {
         id: 1,
         country: 'India',
-        changeUnit: {
-            amount: 100000,
-            unit: 'INR'
-        },
         competitors: [
             {
                 id: 1,
@@ -79,10 +71,6 @@ export const HistoricalListViewDummy: View[] = [
     {
         id: 2,
         country: 'Philippines',
-        changeUnit: {
-            amount: 43000,
-            unit: 'PHP'
-        },
         competitors: [
             {
                 id: 1,
@@ -114,10 +102,6 @@ export const HistoricalListViewDummy: View[] = [
     {
         id: 3,
         country: 'Nepal',
-        changeUnit: {
-            amount: 100000,
-            unit: 'NPR'
-        },
         competitors: [
             {
                 id: 1,
@@ -149,10 +133,6 @@ export const HistoricalListViewDummy: View[] = [
     {
         id: 4,
         country: 'Srilanka',
-        changeUnit: {
-            amount: 280000,
-            unit: 'LKR'
-        },
         competitors: [
             {
                 id: 1,

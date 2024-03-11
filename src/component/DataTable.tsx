@@ -19,7 +19,7 @@ export const DataTable = ({
   if (!itemKey) {
     itemKey = headerKey[0];
   }
-  // 선택한 row의 itemKey를 담은 배열
+    // 선택한 row의 itemKey를 담은 배열
   const [selection, setSelection] = useState(new Set());
   const onChangeSelect = (value: any) => {
     // 기존의 selection으로 새로운 Set 생성
@@ -91,7 +91,7 @@ export const DataTable = ({
       </thead>
       <tbody>
         {items.map((item: any, index: number) => (
-          <tr
+                    <tr
             key={index}
             className={`
             ${selection.has(item[itemKey]) ? "select_row" : ""} 
@@ -110,7 +110,7 @@ export const DataTable = ({
               </td>
             )}
             {/* headerKey를 순회하면서 key를 가져옴 */}
-            {headerKey.map((key: number) => (
+            {headerKey.map((key: string) => (
               <td
                 key={key + index}
                 style={{ minWidth: "10px", textAlign: "center", border: "1px solid #ddd", }}

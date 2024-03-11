@@ -2,15 +2,15 @@ import { currencyFormatter } from "../../function/currencyFormatter";
 
 export const headers = [
     {
-      text: "Country",
-      value: "name",
+      text: "국가",
+      value: "country",
     },
     {
-      text: "Competitors",
-      value: "version",
+      text: "경쟁사",
+      value: "company",
     },
     {
-      text: "Amount",
+      text: "금액",
       value: "amount"
     }
   ];
@@ -27,12 +27,12 @@ export const headers = [
       amount: currencyFormatter(1581682000)
     },
     {
-      name: "",
+      name: "India",
       version: "Sentbe",
       amount: currencyFormatter(1579751000)
     },
     {
-        name: "",
+        name: "India",
         version: "E9pay",
         amount: currencyFormatter(1578009000)
     },

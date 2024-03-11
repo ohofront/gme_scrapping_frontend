@@ -4,10 +4,6 @@ export interface View {
   competitors: Competitor[];
 }
 
-export interface ChangeUnit {
-  amount: number;
-  unit: string;
-}
 export interface Competitor {
   id: number;
   company: string;
