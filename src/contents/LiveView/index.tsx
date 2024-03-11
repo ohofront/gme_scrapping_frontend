@@ -16,6 +16,7 @@ import { Table } from "../../models/table/tableModel";
 import { currencyFormatter } from "../../function/currencyFormatter";
 import DateInput from "../../component/DateInput";
 import moment from "moment";
+import Timer from "../../component/Timer";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -27,14 +28,25 @@ export const InitialParams: Params = {
 const LiveView = () => {
   const [param, setParam] = useState<Params>(InitialParams);
   const [live, setLive] = useState<ResponseParams[]>([]);
+
   const [chart, setChart] = useState<View[]>([]);
   const [table, setTable] = useState<Table[]>([]);
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>('BDP01');
+
   const [loading, setLoading] = useState(true);
   const timerRef = useRef(null);
   const apiUrl = process.env.REACT_APP_SERVICE_URL;
+
+  const START_SECOND = 60;
+  const START_DURATION = 60;
+  const [isStop, setIsStop] = useState(false);
+  const [currentSeconds, setSeconds] = useState(START_SECOND);
+  const [isRunning, setIsRunning] = useState(true);
+  const [duration, setDuration] = useState(START_DURATION);
+  const [count, setCount] = useState(60);
   const selectData = [
     { key: 1, value: "BDP01" },
     { key: 2, value: "BPM01" },
@@ -78,22 +90,50 @@ const LiveView = () => {
      console.log("tableValues", tableValues);
      setTable(tableValues);
   },[live])
-  // useEffect(() => {
-  //   setParam({
-  //     startDttm: "2024-01-31 10:00:00",
-  //     endDttm: "2024-01-31 10:15:00",
-  //     remitMethodCode: "BDP01",
-  //     format: "json",
-  //   });
-  // }, []);
 
+  const resetHandler = () => {
+    setSeconds(START_SECOND);
+    setIsRunning(false);
+    setIsStop(false);
+    setDuration(START_DURATION);
+  };
   
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await getLiveView(param);
-  //     console.log("response:", response);
-  //   })();
-  // }, [param]);
+  const startHandler = () => {
+    setDuration(START_SECOND);
+    setIsRunning(true);
+  };
+
+  const stopHandler = () => {
+    setIsStop(true);
+    setIsRunning(false);
+  };
+
+  const resumeHandler = () => {
+    let newDuration = currentSeconds;
+    setDuration(newDuration);
+
+    setIsRunning(true);
+    setIsStop(false);
+  };
+
+  useEffect(() => {
+    if (isRunning === true) {
+      let timer = duration;
+      var seconds: number = 0;
+      const interval = setInterval(function () {
+        if (--timer <= 0) {
+          resetHandler();
+        } else {
+          seconds = timer;
+          seconds = seconds < 10 ? 0 + seconds : seconds;
+          setSeconds(seconds);
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isRunning]);
+
+
 
   const fetch = async () => {
     try {
@@ -108,22 +148,11 @@ const LiveView = () => {
       console.log(e);
     }
   };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${apiUrl}/GME/gme_scrap/pivot/history`,
-  //         { params: param }
-  //       );
-  //       console.log("response: ", response.data);
-  //       setLive(response.data);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
+  useEffect(() => {
+    console.log("startDate", startDate);
+    
+  },[startDate])
   // useEffect(() => {
   //   console.log("live:", live);
   // },[live])
@@ -141,12 +170,37 @@ const LiveView = () => {
   // }, [param])
 
   useEffect(() => {
+    console.log("count", count);
+  },[count])
+
+  useEffect(() => {
+    console.log(loading);
+  },[loading])
+
+  useEffect(() => {
+    fetch();
+    // 설정된 시간 간격마다 setInterval 콜백이 실행된다. 
     const interval = setInterval(() => {
-      fetch();
-      setLoading(true);
-    }, 60000);
-    return() => clearInterval(interval);
-  }, [loading]);
+      // 타이머 숫자가 하나씩 줄어들도록
+      setCount((count) => count - 1);
+      // 0이 되면 카운트가 멈춤
+      if(count === 0) {
+        setLoading(true);
+        setCount(START_SECOND);       
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+    // 카운트 변수가 바뀔때마다 useEffect 실행
+  }, [count]);
+
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetch();
+  //     setLoading(true);
+  //   }, 60000);
+  //   return() => clearInterval(interval);
+  // }, [fetch]);
 
   // const handleRestart = () => {
   //   if (!timerRef.current) {
@@ -163,11 +217,33 @@ const LiveView = () => {
   
   return (
     <MainWrapper>
-
-         {/* <button onClick={handleRestart}>restart</button> */}
          <SearchBox>
             <div className="left">
-               <SearchFunction defaultTitle="조회" />
+            <Timer count={count}/>
+            {/* {!isRunning && !isStop && (
+              <button
+                onClick={startHandler}
+                className="btn btn-primary btn-lg inline me-3"
+              >
+               START
+              </button>
+            )}
+            {isRunning && (
+              <button
+                onClick={stopHandler}
+                className="btn btn-danger btn-lg inline me-3"
+              >
+              STOP
+              </button>
+            )}
+            {isStop && (
+             <button
+              onClick={resumeHandler}
+              className="btn btn-success btn-lg inline me-3"
+             >
+              RESUME
+             </button>
+            )} */}
             </div>
             <div className="right">
               <SelectBox defaultTitle="송금 코드" optionData={selectData} currentOption={method} setCurrentOption={setMethod} />
@@ -177,7 +253,7 @@ const LiveView = () => {
          </SearchBox>
          
          <DateTimeWrapper>
-           <DateInput defaultTitle="조회 날짜" startDate={moment(startDate).format('YYYY-MM-DD HH:mm')} endDate={moment(endDate).format('YYYY-MM-DD HH:mm')} />
+           <DateInput defaultTitle="조회 시간" startDate={moment(startDate).format('YYYY-MM-DD HH:mm')} endDate={moment(endDate).format('YYYY-MM-DD HH:mm')} />
          </DateTimeWrapper>
 
          <ContentWrapper>
