@@ -41,7 +41,6 @@ const BarChart = ({props}: Props) => {
   //     borderWidth: 10,
   //   });
   // },[list]);
-  
   useEffect(() => {
     if(chartRef.current != null) {
       ctx = chartRef.current.getContext("2d");
@@ -55,7 +54,8 @@ const BarChart = ({props}: Props) => {
           labels: props.competitors.map(item => item.company),
           datasets: [
             {
-              label: props.country,
+              // label: props.country,
+              label: 'GME',
               data: props.competitors.map(item => item.amount),
               backgroundColor: [
                 "rgba(255, 99, 132, 0.2)",
@@ -82,9 +82,39 @@ const BarChart = ({props}: Props) => {
           scales: {
             y: {
               beginAtZero: true,
-              max: 3000000,
+              max: 2100000,
             },
+            x : {
+              ticks : {
+                color: 'black',
+                font: {
+                  size: 17,
+                  weight: 'bold'
+                }
+              }
+            }
           },
+          plugins : {
+            legend: {
+              position: 'top',
+              display: true,
+              labels: {
+                color:'black',
+                font: {
+                  size: 20
+                }
+              }
+            },
+            title: {
+              font: {
+               size: 30
+              },
+              display: true,
+              text: props.country,
+              position: 'top',
+              color: '1px solid #ddd'
+            },
+          }
         },
       });
     };
