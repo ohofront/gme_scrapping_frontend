@@ -7,7 +7,7 @@ const Timer = ({count}: TimerProps) => {
     return(
         <TimerWrapper>
           <TimerTitle>
-            {count}  초 후에 조회됩니다..
+            {count}초 후에 조회됩니다..
           </TimerTitle>
         </TimerWrapper>
     )
