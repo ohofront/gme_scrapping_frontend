@@ -43,7 +43,7 @@ const SearchFunctionTitle = styled.div`
    font-weight: bold;
    font-size: 20px;
    &:hover {
-    background: cornflowerblue;
+    background: red;
     color: white;
     transition: 0.5s;
   }
