@@ -14,6 +14,8 @@ import Loading from "../../component/Loading";
 import SearchFunction from "../../component/SearchFunction";
 import { Table } from "../../models/table/tableModel";
 import { currencyFormatter } from "../../function/currencyFormatter";
+import DateInput from "../../component/DateInput";
+import moment from "moment";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -142,7 +144,7 @@ const LiveView = () => {
     const interval = setInterval(() => {
       fetch();
       setLoading(true);
-    }, 10000);
+    }, 60000);
     return() => clearInterval(interval);
   }, [loading]);
 
@@ -173,6 +175,10 @@ const LiveView = () => {
               <SearchFunction defaultTitle="조회" />
             </div>
          </SearchBox>
+         
+         <DateTimeWrapper>
+           <DateInput defaultTitle="조회 날짜" startDate={moment(startDate).format('YYYY-MM-DD HH:mm')} endDate={moment(endDate).format('YYYY-MM-DD HH:mm')} />
+         </DateTimeWrapper>
 
          <ContentWrapper>
           {loading ? (
@@ -241,7 +247,7 @@ const SearchBox = styled.div`
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
-  margin-bottom: 100px;
+  margin-bottom: 10px;
   .left {
     display: grid;
     grid-template-columns: 1fr;
@@ -254,6 +260,11 @@ const SearchBox = styled.div`
     width: 70%;
     float: right;
   }
+`;
+const DateTimeWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
 `;
 
 const ContentWrapper = styled.div`
