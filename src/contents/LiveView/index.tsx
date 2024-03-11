@@ -153,9 +153,6 @@ const LiveView = () => {
     console.log("startDate", startDate);
     
   },[startDate])
-  // useEffect(() => {
-  //   console.log("live:", live);
-  // },[live])
 
   // useEffect(() => {
   //   console.log("chart:", chart);
@@ -169,26 +166,28 @@ const LiveView = () => {
   //   console.log("params:", param);
   // }, [param])
 
-  useEffect(() => {
-    console.log("count", count);
-  },[count])
+  // useEffect(() => {
+  //   console.log("count", count);
+  // },[count])
+
+  // useEffect(() => {
+  //   console.log(loading);
+  // },[loading])
 
   useEffect(() => {
-    console.log(loading);
-  },[loading])
-
-  useEffect(() => {
-    fetch();
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다. 
     const interval = setInterval(() => {
       // 타이머 숫자가 하나씩 줄어들도록
       setCount((count) => count - 1);
-      // 0이 되면 카운트가 멈춤
-      if(count === 0) {
-        setLoading(true);
-        setCount(START_SECOND);       
-      }
     }, 1000);
+     // 0이 되면 카운트가 멈춤
+     if(count === 0) {
+      setLoading(true);
+      setCount(START_SECOND);       
+    } 
+    if(count === 60){
+      fetch();
+    }
     return () => clearInterval(interval);
     // 카운트 변수가 바뀔때마다 useEffect 실행
   }, [count]);
@@ -246,15 +245,18 @@ const LiveView = () => {
             )} */}
             </div>
             <div className="right">
-              <SelectBox defaultTitle="송금 코드" optionData={selectData} currentOption={method} setCurrentOption={setMethod} />
+              <DateTimeWrapper>
+                <DateInput defaultTitle="조회 시간" searchDate={moment(live[0]?.ScrapDTTM).format('YYYY-MM-DD HH:mm')} />
+              </DateTimeWrapper>
+              {/* <SelectBox defaultTitle="송금 코드" optionData={selectData} currentOption={method} setCurrentOption={setMethod} />
               <DateSelect defaultTitle="기간" startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-              <SearchFunction defaultTitle="조회" />
+              <SearchFunction defaultTitle="조회" /> */}
             </div>
          </SearchBox>
          
-         <DateTimeWrapper>
-           <DateInput defaultTitle="조회 시간" startDate={moment(startDate).format('YYYY-MM-DD HH:mm')} endDate={moment(endDate).format('YYYY-MM-DD HH:mm')} />
-         </DateTimeWrapper>
+         {/* <DateTimeWrapper>
+           <DateInput defaultTitle="조회 시간" searchDate={moment(live[0]?.ScrapDTTM).format('YYYY-MM-DD HH:mm')} />
+         </DateTimeWrapper> */}
 
          <ContentWrapper>
           {loading ? (
@@ -326,14 +328,16 @@ const SearchBox = styled.div`
   margin-bottom: 10px;
   .left {
     display: grid;
-    grid-template-columns: 1fr;
+    // grid-template-columns: 1fr;
     width: 30%;
+    width: 50%;
     float: left;
   }
   .right {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 0.5fr;
-    width: 70%;
+    // grid-template-columns: 1fr 1.5fr 0.5fr;
+    // width: 70%;
+    width: 50%;
     float: right;
   }
 `;

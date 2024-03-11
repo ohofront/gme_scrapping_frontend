@@ -2,23 +2,20 @@ import styled from "styled-components";
 
 interface DateInputProps {
     defaultTitle: string;
-    startDate: string; 
-    endDate: string;
+    searchDate: string; 
+
 }
 
-const DateInput = ({defaultTitle, startDate, endDate}: DateInputProps) => {
+const DateInput = ({defaultTitle, searchDate}: DateInputProps) => {
     return(
         <DateInputWrapper>
             <DateInputTitle>
                {defaultTitle}
             </DateInputTitle>
             <DateInputContent>
-             {startDate}
+             {searchDate}
             </DateInputContent>
-            &nbsp;~&nbsp;
-            <DateInputContent>
-             {endDate}
-            </DateInputContent>
+           
         </DateInputWrapper>
     )
 }
@@ -49,7 +46,7 @@ const DateInputTitle = styled.div`
 const DateInputContent = styled.div`
   display: flex;
   position: relative;
-  width: 200px;
+  width: 250px;
   height: 50px;
   border-radius: 12px;
   background-color: #ffffff;
@@ -60,4 +57,9 @@ const DateInputContent = styled.div`
   cursor: pointer;
   font-weight: bold;
   font-size: 20px;
-`
+  &:hover {
+    background: red;
+    color: white;
+    transition: 0.5s;
+  }
+`;
