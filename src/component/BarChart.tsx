@@ -82,7 +82,7 @@ const BarChart = ({props}: Props) => {
           scales: {
             y: {
               beginAtZero: true,
-              max: 180000000,
+              max: 3000000,
             },
           },
         },
