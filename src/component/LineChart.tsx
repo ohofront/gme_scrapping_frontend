@@ -17,11 +17,13 @@ const LineChart = ({props}: Props) => {
 
     useEffect(() => {
         setList(props)  
-    },[list])
+    },[list, props])
 
     useEffect(() => {
         let tempList: Dataset[] = [];
         tempList = list.map(item => {
+            console.log("list",list);
+            
           return {
             label: item.country,
             data: item.competitors.map(sub => sub.amount),
@@ -44,15 +46,25 @@ const LineChart = ({props}: Props) => {
             borderWidth: 2,
           }
         })  
+        console.log("tempList", tempList);
+        
         setDataset(tempList);
     },[list]);
 
+    const getStepSize = (min: number, max: number) => {
+        const range = max - min; // 최댓값과 최솟값 간의 범위를 계산
+        const interval = Math.ceil(range / 3); // 범위를 3등분하여 각 구간의 크기를 계산
+        const exponent = Math.floor(Math.log10(interval)); // 각 구간의 크기에 대한 로그 값을 계산
+        const factor = Math.pow(10, exponent); // 10의 거듭제곱을 통해 가장 가까운 10의 배수로 구간 크기를 정규화
+        return Math.ceil(interval / factor) * factor;
+      };
+      
     useEffect(() => {
         if(chartRef.current != null) {
             ctx = chartRef.current.getContext("2d");
         }
 
-        const labels = props[0].competitors.map(item => item.company);
+        const labels = props[0]?.competitors.map(item => item.company);
 
         const createChart = () => {
             Chart.register(...registerables);
@@ -63,10 +75,15 @@ const LineChart = ({props}: Props) => {
                     datasets: dataset
                 },
                 options: {
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
-                            beginAtZero: true,
-                            max: 200000000,
+                            // beginAtZero: true,
+                            min: 200000,
+                            max: 2100000,
+                            ticks: {
+                                stepSize: 100000
+                            }
                         }
                     }
                 }
@@ -89,6 +106,6 @@ const LineChart = ({props}: Props) => {
     },[dataset])
     
     
-    return<canvas ref={chartRef}/>;
+    return<canvas ref={chartRef} height={2000}/>;
 };
 export default LineChart;
