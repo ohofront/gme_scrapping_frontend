@@ -7,7 +7,7 @@ export type Params = {
   format: string;
 };
 
-export type Response = {
+export type ResponseParams = {
   ScrapDTTM: string;
   SentNation: string;
   SentCurrency: string;
