@@ -79,10 +79,14 @@ const BarChart = ({props}: Props) => {
           ],
         },
         options: {
+          // maintainAspectRatio: false,
           scales: {
             y: {
               beginAtZero: true,
               max: 2100000,
+              ticks: {
+                stepSize: 10000
+              }
             },
             x : {
               ticks : {
@@ -134,7 +138,7 @@ const BarChart = ({props}: Props) => {
     };
   }, []);
 
-  return <canvas ref={chartRef} />;
+  return <canvas ref={chartRef} height={500}/>;
 };
 
 export default BarChart;
