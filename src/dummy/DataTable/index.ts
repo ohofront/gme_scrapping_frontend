@@ -11,7 +11,11 @@ export const headers = [
     },
     {
       text: "금액",
-      value: "amount"
+      value: "amount",
+    },
+    {
+      text: "환전 단위",
+      value: "changeunit"
     }
   ];
   
