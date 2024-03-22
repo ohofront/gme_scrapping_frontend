@@ -28,18 +28,18 @@ const Dropdown = ({
   const handleOnChangeSelectValue = (value: string) => {
     setCurrentOption(value);
   };
-  useEffect(() => {
-    console.log(isDropdownView);
-  }, [isDropdownView]);
+  // useEffect(() => {
+  //   console.log(isDropdownView);
+  // }, [isDropdownView]);
   return (
     <DropDownWrapper onClickOutside={closeDropDown}>
       <DropDownTtile>{defaultTitle}</DropDownTtile>
       <DropDownBox onClick={handleClickDropdown}>
         <DropDownLabel>
-          {currentOption}
+          {currentOption === "" ? "전체" : currentOption}
           <DropDownButton>{isDropdownView ? "▲" : "▼"}</DropDownButton>
         </DropDownLabel>
-        <DropDownOptions show={isDropdownView}>
+        <DropDownOptions $show={isDropdownView}>
           {optionData.map((data: any, index: any) => (
             <DropDownOption
               key={index}
@@ -56,7 +56,7 @@ const Dropdown = ({
 };
 export default Dropdown;
 
-type TDropDown = { show: boolean };
+type TDropDown = { $show: boolean };
 
 const DropDownWrapper = styled(ClickOutSide)`
   display: flex;
@@ -114,7 +114,7 @@ const DropDownOptions = styled.ul<TDropDown>`
   left: 0;
   width: 100%;
   overflow: auto;
-  max-height: ${({ show }) => (show ? "none" : "0")};
+  max-height: ${(props) => (props.$show ? "none" : "0")};
   height: 600px;
   padding: 0;
   border-radius: 8px;
