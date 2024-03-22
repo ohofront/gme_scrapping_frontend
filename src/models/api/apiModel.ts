@@ -5,6 +5,7 @@ export type Params = {
   endDttm: Date;
   remitMethodCode: RemitMethodCode;
   format: string;
+  country: string;
 };
 
 export type ResponseParams = {

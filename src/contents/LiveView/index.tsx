@@ -29,6 +29,7 @@ export const InitialParams: Params = {
   endDttm: new Date(),
   remitMethodCode: "BDP01",
   format: "json",
+  country: "",
 };
 
 const LiveView = () => {
@@ -41,7 +42,7 @@ const LiveView = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>("BDP01");
-  const [country, setCountry] = useState<string>("전체");
+  const [country, setCountry] = useState<string>("");
 
   const [loading, setLoading] = useState(true);
   const timerRef = useRef(null);
@@ -66,10 +67,13 @@ const LiveView = () => {
       startDttm: startDate,
       endDttm: endDate,
       remitMethodCode: method,
+      country: country,
       format: "json",
     });
-  }, [startDate, endDate, method]);
-
+  }, [startDate, endDate, method, country]);
+  // useEffect(() => {
+  //   console.log(param);
+  // }, [param]);
   useEffect(() => {
     const groupValues = live.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
@@ -224,12 +228,12 @@ const LiveView = () => {
             currentOption={country}
             setCurrentOption={setCountry}
           />
-          <SelectBox
+          {/* <SelectBox
             defaultTitle="송금 코드"
             optionData={selectData}
             currentOption={method}
             setCurrentOption={setMethod}
-          />
+          /> */}
           <SearchFunction defaultTitle="조회" />
           {/* {!isRunning && !isStop && (
               <button
