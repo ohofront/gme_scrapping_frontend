@@ -5,6 +5,7 @@ import {
   RemitMethodCode,
   ResponseParams,
 } from "../../models/api/apiModel";
+
 import axios from "axios";
 import SelectBox from "../../component/SelectBox";
 import styled from "styled-components";
@@ -23,6 +24,7 @@ import moment from "moment";
 import Timer from "../../component/Timer";
 import Dropdown from "../../component/Dropdown";
 import { countries } from "../../enum/country";
+import { remitMethods } from "../../enum/remitmethod";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -33,6 +35,7 @@ export const InitialParams: Params = {
 };
 
 const LiveView = () => {
+  const apiUrl = process.env.REACT_APP_SERVICE_URL;
   const [param, setParam] = useState<Params>(InitialParams);
   const [live, setLive] = useState<ResponseParams[]>([]);
 
@@ -46,7 +49,6 @@ const LiveView = () => {
 
   const [loading, setLoading] = useState(true);
   const timerRef = useRef(null);
-  const apiUrl = process.env.REACT_APP_SERVICE_URL;
 
   const START_SECOND = 60;
   const START_DURATION = 60;
@@ -55,12 +57,6 @@ const LiveView = () => {
   const [isRunning, setIsRunning] = useState(true);
   const [duration, setDuration] = useState(START_DURATION);
   const [count, setCount] = useState(60);
-  const selectData = [
-    { key: 1, value: "BDP01" },
-    { key: 2, value: "BPM01" },
-    { key: 3, value: "BDP01(USD)" },
-    { key: 4, value: "BPM01(USD)" },
-  ];
 
   useEffect(() => {
     setParam({
@@ -71,9 +67,7 @@ const LiveView = () => {
       format: "json",
     });
   }, [startDate, endDate, method, country]);
-  // useEffect(() => {
-  //   console.log(param);
-  // }, [param]);
+
   useEffect(() => {
     const groupValues = live.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
@@ -228,13 +222,21 @@ const LiveView = () => {
             currentOption={country}
             setCurrentOption={setCountry}
           />
-          {/* <SelectBox
+          <Dropdown
             defaultTitle="송금 코드"
-            optionData={selectData}
+            optionData={remitMethods}
             currentOption={method}
             setCurrentOption={setMethod}
-          /> */}
+          />
           <SearchFunction defaultTitle="조회" />
+        </div>
+        <div className="down">
+          <DateTimeWrapper>
+            <DateInput
+              defaultTitle="스크래핑 시간"
+              searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
+            />
+          </DateTimeWrapper>
           {/* {!isRunning && !isStop && (
               <button
                 onClick={startHandler}
@@ -259,23 +261,8 @@ const LiveView = () => {
               RESUME
              </button>
             )} */}
-        </div>
-        <div className="down">
-          <DateTimeWrapper>
-            <DateInput
-              defaultTitle="조회 시간"
-              searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
-            />
-          </DateTimeWrapper>
-          <Timer count={count} />
 
-          {/* <DateSelect
-            defaultTitle="기간"
-            startDate={startDate}
-            endDate={endDate}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-          /> */}
+          <Timer count={count} />
         </div>
       </SearchBox>
 
@@ -345,17 +332,22 @@ const SearchBox = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
   margin-bottom: 50px;
+
+  align-items: center;
+  justify-content: center;
   .top {
-    display: flex;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: grid;
+    grid-template-columns: 0.2fr 0.2fr 0.2fr;
     width: 100%;
-    float: top;
+    align-items: center;
+    justify-content: center;
   }
   .down {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
+    display: grid;
+    grid-template-columns: 0.3fr 0.04fr 0.03fr;
     width: 100%;
-    float: down;
+    align-items: center;
+    justify-content: center;
   }
 `;
 const DateTimeWrapper = styled.div`
