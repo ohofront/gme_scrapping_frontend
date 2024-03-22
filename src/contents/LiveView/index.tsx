@@ -21,7 +21,8 @@ import { currencyFormatter } from "../../function/currencyFormatter";
 import DateInput from "../../component/DateInput";
 import moment from "moment";
 import Timer from "../../component/Timer";
-import SelectBox2 from "../../component/SelectBox2";
+import Dropdown from "../../component/Dropdown";
+import { countries } from "../../enum/country";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -40,7 +41,7 @@ const LiveView = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>("BDP01");
-  const [country, setCountry] = useState<string[]>();
+  const [country, setCountry] = useState<string>("전체");
 
   const [loading, setLoading] = useState(true);
   const timerRef = useRef(null);
@@ -216,8 +217,20 @@ const LiveView = () => {
   return (
     <MainWrapper>
       <SearchBox>
-        <div className="left">
-          <Timer count={count} />
+        <div className="top">
+          <Dropdown
+            defaultTitle="국가"
+            optionData={countries}
+            currentOption={country}
+            setCurrentOption={setCountry}
+          />
+          <SelectBox
+            defaultTitle="송금 코드"
+            optionData={selectData}
+            currentOption={method}
+            setCurrentOption={setMethod}
+          />
+          <SearchFunction defaultTitle="조회" />
           {/* {!isRunning && !isStop && (
               <button
                 onClick={startHandler}
@@ -243,20 +256,15 @@ const LiveView = () => {
              </button>
             )} */}
         </div>
-        <div className="right">
+        <div className="down">
           <DateTimeWrapper>
             <DateInput
               defaultTitle="조회 시간"
               searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
             />
           </DateTimeWrapper>
-          <SelectBox2 defaultTitle="국가" />
-          <SelectBox
-            defaultTitle="송금 코드"
-            optionData={selectData}
-            currentOption={method}
-            setCurrentOption={setMethod}
-          />
+          <Timer count={count} />
+
           {/* <DateSelect
             defaultTitle="기간"
             startDate={startDate}
@@ -264,7 +272,6 @@ const LiveView = () => {
             setStartDate={setStartDate}
             setEndDate={setEndDate}
           /> */}
-          <SearchFunction defaultTitle="조회" />
         </div>
       </SearchBox>
 
@@ -328,23 +335,23 @@ const Content = styled.div`
 
 const SearchBox = styled.div`
   width: 100%;
-  height: 150px;
+  height: 300px;
   border: 1px solid #dddddd;
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
   margin-bottom: 50px;
-  .left {
-    display: grid;
-    // grid-template-columns: 1fr;
-    width: 30%;
-    float: left;
+  .top {
+    display: flex;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    float: top;
   }
-  .right {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1.5fr 0.5fr;
-    width: 70%;
-    float: right;
+  .down {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    float: down;
   }
 `;
 const DateTimeWrapper = styled.div`
