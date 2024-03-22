@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import styled, { css, keyframes } from "styled-components";
-import { FaAngleDown } from "react-icons/fa";
+import { useCallback, useState } from "react";
+import styled from "styled-components";
 import ClickOutSide from "./ClickOutside";
 
 interface DropDownProps {
@@ -105,12 +104,6 @@ const DropDownLabel = styled.label`
   cursor: pointer;
 `;
 
-const DropDownButton = styled.button`
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  transition: 300ms ease-out;
-`;
 const DropDownOptions = styled.ul<TDropDown>`
   position: absolute;
   list-style: none;
