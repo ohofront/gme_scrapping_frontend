@@ -18,7 +18,7 @@ const TabMenu = ({ tabData }: TabMenuProps) => {
         {tabData.map((tab, index) => (
           <TabButton
             key={index}
-            isActive={activeIndex === index}
+            $isActive={activeIndex === index}
             onClick={() => tabClickHandler(index)}
           >
             {tab.title}
@@ -41,12 +41,13 @@ const TabHeader = styled.ul`
   list-style: none;
 `;
 
-type TButtonProps = { isActive: boolean };
+type TButtonProps = { $isActive: boolean | undefined };
+
 const TabButton = styled.button<TButtonProps>`
   border: none;
   padding: 30px 30px;
-  background-color: ${({ isActive }) => (isActive ? "#f0ece3" : "transparent")};
-  color: ${({ isActive }) => (isActive ? "black" : "grey")};
+  background-color: ${(props) => (props.$isActive ? "#f0ece3" : "transparent")};
+  color: ${(props) => (props.$isActive ? "black" : "grey")};
   font-weight: 900;
   font-size: 20px;
   cursor: pointer;
