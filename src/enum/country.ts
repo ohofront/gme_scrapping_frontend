@@ -3,74 +3,78 @@ import { Country } from "../models/country/countryModel";
 export const countries: Country[] = [
   {
     key: 1,
-    value: "China",
+    value: ""
   },
   {
     key: 2,
-    value: "Thailand",
+    value: "China",
   },
   {
     key: 3,
-    value: "Vietnam",
+    value: "Thailand",
   },
   {
     key: 4,
-    value: "Cambodia",
+    value: "Vietnam",
   },
   {
     key: 5,
-    value: "Nepal",
+    value: "Cambodia",
   },
   {
     key: 6,
-    value: "Indonesia",
+    value: "Nepal",
   },
   {
     key: 7,
-    value: "Philippines",
+    value: "Indonesia",
   },
   {
     key: 8,
-    value: "Srilanka",
+    value: "Philippines",
   },
   {
     key: 9,
-    value: "Mongolia",
+    value: "Srilanka",
   },
   {
     key: 10,
-    value: "Pakistan",
+    value: "Mongolia",
   },
   {
     key: 11,
-    value: "Russia",
+    value: "Pakistan",
   },
   {
     key: 12,
-    value: "Uzbekistan",
+    value: "Russia",
   },
   {
     key: 13,
-    value: "Ghana",
+    value: "Uzbekistan",
   },
   {
     key: 14,
-    value: "Kenya",
+    value: "Ghana",
   },
   {
     key: 15,
-    value: "Uganda",
+    value: "Kenya",
   },
   {
     key: 16,
-    value: "Myanmar",
+    value: "Uganda",
   },
   {
     key: 17,
-    value: "Bangladesh",
+    value: "Myanmar",
   },
   {
     key: 18,
+    value: "Bangladesh",
+  },
+  {
+    key: 19,
     value: "Malaysia",
   },
 ];

@@ -43,7 +43,7 @@ const Dropdown = ({
               value={currentOption}
               onClick={() => handleOnChangeSelectValue(data.value)}
             >
-              {data.value}
+              {data.value === "" ? "전체" : data.value}
             </DropDownOption>
           ))}
         </DropDownOptions>
