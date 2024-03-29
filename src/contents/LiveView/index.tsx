@@ -25,6 +25,7 @@ import Timer from "../../component/Timer";
 import Dropdown from "../../component/Dropdown";
 import { countries } from "../../enum/country";
 import { remitMethods } from "../../enum/remitmethod";
+import Button from "../../component/Button";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -228,7 +229,21 @@ const LiveView = () => {
             currentOption={method}
             setCurrentOption={setMethod}
           />
-          <SearchFunction defaultTitle="조회" />
+          <Button
+            outline={false}
+            color="red"
+            font="black"
+            fontSize={20}
+            height="50px"
+            width="200px"
+            borderRadius="12px"
+            onClick={fetch}
+            disabled={false}
+          >
+            조회
+          </Button>
+
+          {/* <SearchFunction defaultTitle="조회" /> */}
         </div>
         <div className="down">
           <DateTimeWrapper>
