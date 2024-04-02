@@ -1,18 +1,16 @@
-import { fetchScrapApi } from "..";
+import { AxiosPromise } from "axios";
+import { apiScrapClient } from "..";
 import { Params } from "../../models/api/apiModel";
+import URL_INFO from "../../enum/urllnfo";
 
-export const getLiveView = async (params: Params) => {
-  console.log("params: ", params);
+type ScrapApi = {
+  url: string;
+  method: string;
+  data?: Object;
+  params?: Object | null;
+};
 
-  try {
-    const result = await fetchScrapApi({
-      url: "/GME/gme_scrap/pivot/history",
-      method: "get",
-      data: {},
-      params: params,
-    });
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
+export const getLiveView = (data: Params): AxiosPromise => {
+  console.log("params: ", data);
+  return apiScrapClient.get(URL_INFO.LIVE_VIEW.GET_INFO, {params: data})
 };

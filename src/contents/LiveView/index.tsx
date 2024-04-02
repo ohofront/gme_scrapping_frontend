@@ -26,6 +26,7 @@ import Dropdown from "../../component/Dropdown";
 import { countries } from "../../enum/country";
 import { remitMethods } from "../../enum/remitmethod";
 import Button from "../../component/Button";
+import { getLiveView } from "../../api/LiveView";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -36,7 +37,6 @@ export const InitialParams: Params = {
 };
 
 const LiveView = () => {
-  const apiUrl = process.env.REACT_APP_SERVICE_URL;
   const [param, setParam] = useState<Params>(InitialParams);
   const [live, setLive] = useState<ResponseParams[]>([]);
 
@@ -52,11 +52,6 @@ const LiveView = () => {
   const timerRef = useRef(null);
 
   const START_SECOND = 60;
-  const START_DURATION = 60;
-  const [isStop, setIsStop] = useState(false);
-  const [currentSeconds, setSeconds] = useState(START_SECOND);
-  const [isRunning, setIsRunning] = useState(true);
-  const [duration, setDuration] = useState(START_DURATION);
   const [count, setCount] = useState(60);
 
   useEffect(() => {
@@ -70,7 +65,7 @@ const LiveView = () => {
   }, [startDate, endDate, method, country]);
 
   useEffect(() => {
-    const groupValues = live.reduce((acc: any, cur: any) => {
+    const chartValues = live.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
         (item: any) => item.country === cur.SentNation
       );
@@ -87,8 +82,8 @@ const LiveView = () => {
       }
       return acc;
     }, []);
-    console.log("groupValues", groupValues);
-    setChart(groupValues);
+    console.log("chartValues", chartValues);
+    setChart(chartValues);
   }, [live]);
 
   useEffect(() => {
@@ -119,81 +114,26 @@ const LiveView = () => {
     setTable(tableValues);
   }, [live]);
 
-  // const resetHandler = () => {
-  //   setSeconds(START_SECOND);
-  //   setIsRunning(false);
-  //   setIsStop(false);
-  //   setDuration(START_DURATION);
-  // };
-
-  // const startHandler = () => {
-  //   setDuration(START_SECOND);
-  //   setIsRunning(true);
-  // };
-
-  // const stopHandler = () => {
-  //   setIsStop(true);
-  //   setIsRunning(false);
-  // };
-
-  // const resumeHandler = () => {
-  //   let newDuration = currentSeconds;
-  //   setDuration(newDuration);
-
-  //   setIsRunning(true);
-  //   setIsStop(false);
-  // };
-
-  // useEffect(() => {
-  //   if (isRunning === true) {
-  //     let timer = duration;
-  //     var seconds: number = 0;
-  //     const interval = setInterval(function () {
-  //       if (--timer <= 0) {
-  //         resetHandler();
-  //       } else {
-  //         seconds = timer;
-  //         seconds = seconds < 10 ? 0 + seconds : seconds;
-  //         setSeconds(seconds);
-  //       }
-  //     }, 1000);
-  //     return () => clearInterval(interval);
+  // const fetch = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${apiUrl}/GME/gme_scrap/pivot/history`,
+  //       { params: param }
+  //     );
+  //     console.log("response: ", response.data);
+  //     setLive(response.data);
+  //     setLoading(false);
+  //   } catch (e) {
+  //     console.log(e);
   //   }
-  // }, [isRunning]);
+  // };
 
-  const fetch = async () => {
-    try {
-      const response = await axios.get(
-        `${apiUrl}/GME/gme_scrap/pivot/history`,
-        { params: param }
-      );
-      console.log("response: ", response.data);
-      setLive(response.data);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // useEffect(() => {
-  //   console.log("chart:", chart);
-  // },[chart])
-
-  // useEffect(() => {
-  //   console.log("table:", table);
-  // },[table])
-
-  // useEffect(() => {
-  //   console.log("params:", param);
-  // }, [param])
-
-  // useEffect(() => {
-  //   console.log("count", count);
-  // },[count])
-
-  // useEffect(() => {
-  //   console.log(loading);
-  // },[loading])
+  const fetch = useCallback(() => {
+    getLiveView(param)
+      .then((response: any) => setLive(response.data))
+      .catch((error) => console.log(error));
+    setLoading(false);
+  }, [param]);
 
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
@@ -252,30 +192,6 @@ const LiveView = () => {
               searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
             />
           </DateTimeWrapper>
-          {/* {!isRunning && !isStop && (
-              <button
-                onClick={startHandler}
-                className="btn btn-primary btn-lg inline me-3"
-              >
-               START
-              </button>
-            )}
-            {isRunning && (
-              <button
-                onClick={stopHandler}
-                className="btn btn-danger btn-lg inline me-3"
-              >
-              STOP
-              </button>
-            )}
-            {isStop && (
-             <button
-              onClick={resumeHandler}
-              className="btn btn-success btn-lg inline me-3"
-             >
-              RESUME
-             </button>
-            )} */}
 
           <Timer count={count} />
         </div>

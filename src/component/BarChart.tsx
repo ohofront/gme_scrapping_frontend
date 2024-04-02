@@ -6,17 +6,17 @@ import { View } from "../models/view/viewModel";
 interface Props {
   props: View;
 }
-const BarChart = ({props}: Props) => {
+const BarChart = ({ props }: Props) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [list, setList] = useState<View>(defaultListViewDummy);
   // const [dataset, setDataset] = useState<Dataset>();
 
   let chartInstance: any = null;
-  let ctx : any = null;
+  let ctx: any = null;
 
   useEffect(() => {
-    setList(props)  
-  },[list])
+    setList(props);
+  }, [list]);
 
   // useEffect(() => {
   //   setDataset({
@@ -29,7 +29,7 @@ const BarChart = ({props}: Props) => {
   //       "rgba(75, 192, 192, 0.2)",
   //       "rgba(153, 102, 255, 0.2)",
   //       "rgba(255, 159, 64, 0.2)",
-  //     ], 
+  //     ],
   //     borderColor: [
   //       "rgba(255, 99, 132, 1)",
   //       "rgba(54, 162, 235, 1)",
@@ -42,7 +42,7 @@ const BarChart = ({props}: Props) => {
   //   });
   // },[list]);
   useEffect(() => {
-    if(chartRef.current != null) {
+    if (chartRef.current != null) {
       ctx = chartRef.current.getContext("2d");
     }
 
@@ -51,74 +51,67 @@ const BarChart = ({props}: Props) => {
       chartInstance = new Chart(ctx, {
         type: "bar",
         data: {
-          labels: props.competitors.map(item => item.company),
+          labels: props.competitors.map((item) => item.company),
           datasets: [
             {
               // label: props.country,
-              label: 'GME',
-              data: props.competitors.map(item => item.amount),
+              // label: "GME",
+              data: props.competitors.map((item) => item.amount),
               backgroundColor: [
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)",
-              ],
-              borderColor: [
-                "rgba(255, 99, 132, 1)",
+                "rgba(255, 0, 0)",
                 "rgba(54, 162, 235, 1)",
                 "rgba(255, 206, 86, 1)",
                 "rgba(75, 192, 192, 1)",
                 "rgba(153, 102, 255, 1)",
                 "rgba(255, 159, 64, 1)",
+                "rgba(255, 99, 135, 1)",
               ],
-              borderWidth: 3,
-
+              borderWidth: 1,
+              borderRadius: 5,
             },
           ],
         },
         options: {
-          // maintainAspectRatio: false,
           scales: {
             y: {
               beginAtZero: true,
               max: 2100000,
               ticks: {
-                stepSize: 10000
-              }
+                stepSize: 1000,
+              },
             },
-            x : {
-              ticks : {
-                color: 'black',
+            x: {
+              ticks: {
+                color: "black",
                 font: {
                   size: 17,
-                  weight: 'bold'
-                }
-              }
-            }
+                  weight: "bold",
+                },
+              },
+            },
           },
-          plugins : {
+          plugins: {
+            colors: { enabled: true },
             legend: {
-              position: 'top',
-              display: true,
+              position: "top",
+              display: false,
               labels: {
-                color:'black',
+                color: "black",
                 font: {
-                  size: 20
-                }
-              }
+                  size: 10,
+                },
+              },
             },
             title: {
               font: {
-               size: 30
+                size: 30,
               },
               display: true,
               text: props.country,
-              position: 'top',
-              color: '1px solid #ddd'
+              position: "top",
+              color: "1px solid #ddd",
             },
-          }
+          },
         },
       });
     };
@@ -136,9 +129,9 @@ const BarChart = ({props}: Props) => {
     return () => {
       destroyChart(); // 컴포넌트가 unmount될 때 차트 파괴
     };
-  }, []);
+  }, [props]);
 
-  return <canvas ref={chartRef} height={500}/>;
+  return <canvas ref={chartRef} height={300} width={300} />;
 };
 
 export default BarChart;

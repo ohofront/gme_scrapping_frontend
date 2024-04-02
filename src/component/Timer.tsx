@@ -1,12 +1,82 @@
 import styled from "styled-components";
-import playIcon from "../assets/images/play.png";
+import { FaPlay, FaStop } from "react-icons/fa";
+import { useEffect, useState } from "react";
+
 type TimerProps = {
   count: number;
 };
 const Timer = ({ count }: TimerProps) => {
+  const START_DURATION = 60;
+  const [isStop, setIsStop] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [currentSeconds, setSeconds] = useState(count);
+  const [duration, setDuration] = useState(START_DURATION);
+
+  const resetHandler = () => {
+    setSeconds(count);
+    setIsRunning(false);
+    setIsStop(false);
+    setDuration(START_DURATION);
+  };
+
+  const startHandler = () => {
+    setDuration(count);
+    setIsRunning(true);
+  };
+
+  const stopHandler = () => {
+    setIsStop(true);
+    setIsRunning(false);
+  };
+
+  const resumeHandler = () => {
+    let newDuration = currentSeconds;
+    setDuration(newDuration);
+    setIsRunning(true);
+    setIsStop(false);
+  };
+
+  useEffect(() => {
+    if (isRunning === true) {
+      let timer = duration;
+      var seconds: number = 0;
+      const interval = setInterval(function () {
+        if (--timer <= 0) {
+          resetHandler();
+        } else {
+          seconds = timer;
+          seconds = seconds < 10 ? 0 + seconds : seconds;
+          setSeconds(seconds);
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isRunning]);
+
   return (
     <TimerWrapper>
-      <img src={playIcon} alt="play_icon" style={{ height: 30 }} />
+      {!isRunning && !isStop && (
+        <FaPlay
+          onClick={startHandler}
+          color="red"
+          style={{ cursor: "pointer", width: 100, height: 30 }}
+        />
+      )}
+      {isRunning && (
+        <FaStop
+          onClick={stopHandler}
+          color="red"
+          style={{ cursor: "pointer", width: 100, height: 30 }}
+        />
+      )}
+      {isStop && (
+        <FaPlay
+          onClick={resumeHandler}
+          color="red"
+          style={{ cursor: "pointer", width: 100, height: 30 }}
+        />
+      )}
+      {/* <img src={playIcon} alt="play_icon" style={{ height: 30 }} /> */}
       <TimerTitle>{count}초 후에 조회됩니다..</TimerTitle>
     </TimerWrapper>
   );

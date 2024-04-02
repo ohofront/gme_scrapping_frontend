@@ -34,8 +34,8 @@ const Dropdown = ({
       <DropDownBox onClick={handleClickDropdown}>
         <DropDownLabel>
           {currentOption === "" ? "전체" : currentOption}
-          {isDropdownView ? "▲" : "▼"}
         </DropDownLabel>
+        {isDropdownView ? "▲" : "▼"}
         <DropDownOptions $show={isDropdownView}>
           {optionData.map((data: any, index: any) => (
             <DropDownOption
@@ -102,6 +102,7 @@ const DropDownLabel = styled.label`
   margin-left: 10px;
   text-align: center;
   cursor: pointer;
+  padding: 10px;
 `;
 
 const DropDownOptions = styled.ul<TDropDown>`
