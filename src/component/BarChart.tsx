@@ -77,7 +77,7 @@ const BarChart = ({ props }: Props) => {
               beginAtZero: true,
               max: 2100000,
               ticks: {
-                stepSize: 1000,
+                stepSize: 10000,
               },
             },
             x: {

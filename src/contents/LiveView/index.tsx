@@ -27,6 +27,7 @@ import { countries } from "../../enum/country";
 import { remitMethods } from "../../enum/remitmethod";
 import Button from "../../component/Button";
 import { getLiveView } from "../../api/LiveView";
+import Modal from "../../component/Modal";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -53,6 +54,8 @@ const LiveView = () => {
 
   const START_SECOND = 60;
   const [count, setCount] = useState(60);
+  const [isSearchModal, setIsSearchModal] = useState(false);
+  // const apiUrl = process.env.REACT_APP_SERVICE_URL;
 
   useEffect(() => {
     setParam({
@@ -115,6 +118,8 @@ const LiveView = () => {
   }, [live]);
 
   // const fetch = async () => {
+  //   setLoading(true);
+  //   setIsSearchModal(false);
   //   try {
   //     const response = await axios.get(
   //       `${apiUrl}/GME/gme_scrap/pivot/history`,
@@ -128,12 +133,23 @@ const LiveView = () => {
   //   }
   // };
 
-  const fetch = useCallback(() => {
-    getLiveView(param)
-      .then((response: any) => setLive(response.data))
-      .catch((error) => console.log(error));
-    setLoading(false);
-  }, [param]);
+  const fetch = async () => {
+    setLoading(true);
+    setIsSearchModal(false);
+    try {
+      await getLiveView(param)
+        .then((response: any) => setLive(response.data))
+        .catch((error) => console.log(error));
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleSearch = () => {
+    console.log("조회");
+    setIsSearchModal(true);
+  };
 
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
@@ -177,7 +193,7 @@ const LiveView = () => {
             height="50px"
             width="200px"
             borderRadius="12px"
-            onClick={fetch}
+            onClick={handleSearch}
             disabled={false}
           >
             조회
@@ -219,8 +235,43 @@ const LiveView = () => {
               })}
             </ChartWrapper>
           </>
-        ) : null}
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                fontSize: 50,
+                fontWeight: "bold",
+                // alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                alignContent: "center",
+              }}
+            >
+              정보를 불러오는 중입니다...
+            </div>
+          </div>
+        )}
       </ContentWrapper>
+      {isSearchModal && (
+        <Modal
+          visible={isSearchModal}
+          title="스크래핑 조회"
+          confirmText="조회"
+          onConfirm={fetch}
+          onClose={() => setIsSearchModal(false)}
+          height={500}
+        >
+          이렇게 조회하시겠습니까?
+          <ChooseSearch>{country === "" ? "전체" : country}</ChooseSearch>
+          <ChooseSearch>{method}</ChooseSearch>
+        </Modal>
+      )}
     </MainWrapper>
   );
 };
@@ -291,4 +342,20 @@ const ContentWrapper = styled.div`
   display: flex;
   width: 100%;
   flex-direction: row;
+`;
+
+const ChooseSearch = styled.div`
+  /* 공통 스타일 */
+  display: flex;
+  position: relative;
+  width: 100%;
+  gap: 500px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+  box-sizing: border-box;
+  border: none;
 `;

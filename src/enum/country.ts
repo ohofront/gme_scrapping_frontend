@@ -35,7 +35,7 @@ export const countries: Country[] = [
   },
   {
     key: 9,
-    value: "Srilanka",
+    value: "Sri Lanka",
   },
   {
     key: 10,
@@ -76,5 +76,9 @@ export const countries: Country[] = [
   {
     key: 19,
     value: "Malaysia",
+  },
+  {
+    key: 20,
+    value: "India",
   },
 ];
