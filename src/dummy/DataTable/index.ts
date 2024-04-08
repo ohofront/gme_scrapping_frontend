@@ -6,6 +6,10 @@ export const headers = [
       value: "country",
     },
     {
+      text: "환전 단위",
+      value: "changeunit"
+    },
+    {
       text: "경쟁사",
       value: "company",
     },
@@ -13,10 +17,7 @@ export const headers = [
       text: "금액",
       value: "amount",
     },
-    {
-      text: "환전 단위",
-      value: "changeunit"
-    }
+
   ];
   
   export type itemsType = {
