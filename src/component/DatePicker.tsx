@@ -1,55 +1,41 @@
 import { registerables } from "chart.js";
 import styled from "styled-components";
 import DatePicker, { registerLocale } from "react-datepicker";
-import 'react-datepicker/dist/react-datepicker.css';
-import {ko} from "date-fns/locale";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/locale";
 
 interface DateSelectProps {
-    defaultTitle?: string;
-    startDate: Date;
-    endDate: Date;
-    setStartDate: any;
-    setEndDate: any;
+  defaultTitle?: string;
+  startDate: Date;
+  setStartDate: any;
 }
 
-const DateSelect = ({ defaultTitle, startDate, endDate, setStartDate, setEndDate}: DateSelectProps) => {
-    registerLocale("ko", ko);
+const DateSelect = ({
+  defaultTitle,
+  startDate,
+  setStartDate,
+}: DateSelectProps) => {
+  registerLocale("ko", ko);
 
-    return (
-        <DateSelectWrapper>
-            <DateSelectTitle>
-               {defaultTitle}
-            </DateSelectTitle>
-            <SDateWrapper>
-               <SDatePicker
-                 dateFormat={"yyyy년 MM월 dd일 HH:mm"}
-                 locale="ko"
-                 showTimeSelect
-                 timeFormat="HH:mm"
-                 timeIntervals={20}
-                 selected={startDate}
-                 onChange={(date) => setStartDate(date)}
-                 selectsStart
-                 startDate={startDate}
-               />
-                &nbsp;~&nbsp;
-                <SDatePicker
-                  dateFormat={"yyyy년 MM월 dd일 HH:mm"}
-                 locale="ko"
-                 showTimeSelect
-                 timeFormat="HH:mm"
-                 timeIntervals={20}
-                 selected={endDate}
-                 onChange={(date) => setEndDate(date)}
-                 selectsStart
-                 startDate={startDate}
-               />
-            </SDateWrapper>
-       
-        </DateSelectWrapper>
-
-    )
-}
+  return (
+    <DateSelectWrapper>
+      <DateSelectTitle>{defaultTitle}</DateSelectTitle>
+      <SDateWrapper>
+        <SDatePicker
+          dateFormat={"yyyy년 MM월 dd일 HH:mm"}
+          locale="ko"
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={30}
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+        />
+      </SDateWrapper>
+    </DateSelectWrapper>
+  );
+};
 export default DateSelect;
 
 const DateSelectWrapper = styled.div`
@@ -81,15 +67,15 @@ const SDateWrapper = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-`
+`;
 const SDatePicker = styled(DatePicker)`
   display: flex;
-  width: 300px;
+  width: 350px;
   height: 50px;
   align-items: center;
   justify-content: center;
   text-align: center;
-  border: 2px solid #DDDDDD;
+  border: 2px solid #dddddd;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   font-size: 20px;
