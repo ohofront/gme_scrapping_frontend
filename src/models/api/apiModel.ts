@@ -2,10 +2,11 @@ export type RemitMethodCode = "BDP01" | "BPM01" | "BDP01(USD)" | "BPM01(USD)";
 
 export type Params = {
   startDttm: Date;
-  endDttm: Date;
   remitMethodCode: RemitMethodCode;
   format: string;
   country: string;
+  isHistory: string;
+  period: string;
 };
 
 export type ResponseParams = {
