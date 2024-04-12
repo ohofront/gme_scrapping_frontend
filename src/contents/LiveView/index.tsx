@@ -31,10 +31,11 @@ import Modal from "../../component/Modal";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
-  endDttm: new Date(),
   remitMethodCode: "BDP01",
   format: "json",
   country: "",
+  isHistory: "N",
+  period: "",
 };
 
 const LiveView = () => {
@@ -45,7 +46,6 @@ const LiveView = () => {
   const [table, setTable] = useState<Table[]>([]);
 
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>("BDP01");
   const [country, setCountry] = useState<string>("");
 
@@ -60,12 +60,13 @@ const LiveView = () => {
   useEffect(() => {
     setParam({
       startDttm: startDate,
-      endDttm: endDate,
       remitMethodCode: method,
       country: country,
       format: "json",
+      isHistory: "N",
+      period: "",
     });
-  }, [startDate, endDate, method, country]);
+  }, [startDate, method, country]);
 
   useEffect(() => {
     const chartValues = live.reduce((acc: any, cur: any) => {
