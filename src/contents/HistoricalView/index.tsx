@@ -17,13 +17,15 @@ import DateInput from "../../component/DateInput";
 import moment from "moment";
 import { View } from "../../models/view/viewModel";
 import Loading from "../../component/Loading";
+import DateSelect from "../../component/DatePicker";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
-  endDttm: new Date(),
   remitMethodCode: "BDP01",
   format: "json",
   country: "",
+  isHistory: "Y",
+  period: "D",
 };
 
 const HistoricalView = () => {
@@ -31,12 +33,28 @@ const HistoricalView = () => {
   const START_SECOND = 60;
 
   const [param, setParam] = useState<Params>(InitialParams);
-  const [live, setLive] = useState<ResponseParams[]>([]);
+  const [history, setHistory] = useState<ResponseParams[]>([]);
   const [table, setTable] = useState<Table[]>([]);
   const [chart, setChart] = useState<View[]>([]);
 
+  const [startDate, setStartDate] = useState(new Date());
+  const [method, setMethod] = useState<RemitMethodCode>("BDP01");
+  const [country, setCountry] = useState<string>("");
+  const [period, setPriod] = useState<string>("D");
+
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(60);
+
+  useEffect(() => {
+    setParam({
+      startDttm: startDate,
+      remitMethodCode: method,
+      country: country,
+      format: "json",
+      isHistory: "Y",
+      period: period,
+    });
+  }, [period, startDate, method, country]);
 
   const fetch = async () => {
     try {
@@ -45,7 +63,7 @@ const HistoricalView = () => {
         { params: param }
       );
       console.log("response: ", response.data);
-      setLive(response.data);
+      setHistory(response.data);
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -53,7 +71,7 @@ const HistoricalView = () => {
   };
 
   useEffect(() => {
-    const groupValues = live.reduce((acc: any, cur: any) => {
+    const groupValues = history.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
         (item: any) => item.country === cur.SentNation
       );
@@ -72,10 +90,10 @@ const HistoricalView = () => {
     }, []);
     console.log("groupValues", groupValues);
     setChart(groupValues);
-  }, [live]);
+  }, [history]);
 
   useEffect(() => {
-    const tableValues = live.reduce((acc: any, cur: any) => {
+    const tableValues = history.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
         (item: any) => item.country === cur.SentNation
       );
@@ -96,7 +114,7 @@ const HistoricalView = () => {
     }, []);
     console.log("tableValues", tableValues);
     setTable(tableValues);
-  }, [live]);
+  }, [history]);
 
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
@@ -119,26 +137,30 @@ const HistoricalView = () => {
   return (
     <MainWrapper>
       <SearchBox>
-        <div className="left">
+        <div className="top">
           <Timer count={count} />
-        </div>
-        <div className="right">
           <DateTimeWrapper>
-            <DateInput
+            {/* <DateInput
               defaultTitle="조회 시간"
               searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
+            /> */}
+            <DateSelect
+              defaultTitle="조회시간"
+              startDate={startDate}
+              setStartDate={setStartDate}
             />
           </DateTimeWrapper>
         </div>
+        <div className="right"></div>
       </SearchBox>
       <ContentWrapper>
         {loading ? (
           <Loading />
-        ) : live.length > 0 ? (
+        ) : history.length > 0 ? (
           <>
-            <TableWrapper>
+            {/* <TableWrapper>
               <DataTable headers={headers} items={table} selectable={false} />
-            </TableWrapper>
+            </TableWrapper> */}
             <ChartWrapper>
               <LineChart props={chart} />
             </ChartWrapper>
@@ -164,11 +186,10 @@ const SearchBox = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
   margin-bottom: 50px;
-  .left {
+  .top {
     display: grid;
-    // grid-template-columns: 1fr;
-    width: 30%;
-    width: 50%;
+    grid-template-columns: 0.5fr 0.5fr;
+    width: 100%;
     float: left;
   }
   .right {
