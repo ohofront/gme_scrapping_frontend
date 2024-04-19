@@ -55,7 +55,7 @@ const Timer = ({ count }: TimerProps) => {
 
   return (
     <TimerWrapper>
-      {!isRunning && !isStop && (
+      {/* {!isRunning && !isStop && (
         <FaPlay
           onClick={startHandler}
           color="red"
@@ -75,7 +75,7 @@ const Timer = ({ count }: TimerProps) => {
           color="red"
           style={{ cursor: "pointer", width: 100, height: 30 }}
         />
-      )}
+      )} */}
       {/* <img src={playIcon} alt="play_icon" style={{ height: 30 }} /> */}
       <TimerTitle>{count}초 후에 조회됩니다..</TimerTitle>
     </TimerWrapper>
