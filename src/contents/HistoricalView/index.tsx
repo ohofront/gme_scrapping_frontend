@@ -170,6 +170,24 @@ const HistoricalView = () => {
     setTable(tableValues);
   }, [history]);
 
+  // useEffect(() => {
+  //   // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
+  //   const interval = setInterval(() => {
+  //     // 타이머 숫자가 하나씩 줄어들도록
+  //     setCount((count) => count - 1);
+  //   }, 1000);
+  //   // 0이 되면 카운트가 멈춤
+  //   if (count === 0) {
+  //     setLoading(true);
+  //     setCount(START_SECOND);
+  //   }
+  //   if (count === 60) {
+  //     fetch();
+  //   }
+  //   return () => clearInterval(interval);
+  //   // 카운트 변수가 바뀔때마다 useEffect 실행
+  // }, [count]);
+
   useEffect(() => {
     // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
     const interval = setInterval(() => {
@@ -177,16 +195,16 @@ const HistoricalView = () => {
       setCount((count) => count - 1);
     }, 1000);
     // 0이 되면 카운트가 멈춤
-    if (count === 0) {
+    if (param) {
       setLoading(true);
       setCount(START_SECOND);
     }
-    if (count === 60) {
+    if (param) {
       fetch();
     }
     return () => clearInterval(interval);
     // 카운트 변수가 바뀔때마다 useEffect 실행
-  }, [count]);
+  }, [param]);
 
   return (
     <MainWrapper>
