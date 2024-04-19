@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Chart, registerables } from "chart.js";
 import { defaultListViewDummy } from "../dummy/LiveView";
 import { View } from "../models/view/viewModel";
@@ -15,8 +15,32 @@ const BarChart = ({ props }: Props) => {
   let ctx: any = null;
 
   useEffect(() => {
+    console.log("Bar Chart props", props);
+
     setList(props);
-  }, [list]);
+  }, [list, props]);
+  // 최대,최소값을 구하는
+  const min = useMemo(() => {
+    return Math.min.apply(
+      null,
+      props.competitors.map((item) => item.amount)
+    );
+  }, [props]);
+
+  const max = useMemo(() => {
+    return Math.max.apply(
+      null,
+      props.competitors.map((item) => item.amount)
+    );
+  }, [props]);
+
+  const getStepSize = (min: number, max: number) => {
+    const range = max - min; // 최댓값과 최솟값 간의 범위를 계산
+    const interval = Math.ceil(range / 10000); // 범위를 3등분하여 각 구간의 크기를 계산
+    const exponent = Math.floor(Math.log10(interval)); // 각 구간의 크기에 대한 로그 값을 계산
+    const factor = Math.pow(10, exponent); // 10의 거듭제곱을 통해 가장 가까운 10의 배수로 구간 크기를 정규화
+    return Math.ceil(interval / factor) * factor;
+  };
 
   // useEffect(() => {
   //   setDataset({
@@ -67,7 +91,6 @@ const BarChart = ({ props }: Props) => {
                 "rgba(255, 99, 135, 1)",
               ],
               borderWidth: 1,
-              borderRadius: 5,
             },
           ],
         },
@@ -75,9 +98,8 @@ const BarChart = ({ props }: Props) => {
           scales: {
             y: {
               beginAtZero: true,
-              max: 2100000,
               ticks: {
-                stepSize: 10000,
+                stepSize: getStepSize(min, max),
               },
             },
             x: {
