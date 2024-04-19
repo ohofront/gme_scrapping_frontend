@@ -15,10 +15,9 @@ const BarChart = ({ props }: Props) => {
   let ctx: any = null;
 
   useEffect(() => {
-    console.log("Bar Chart props", props);
-
     setList(props);
   }, [list, props]);
+
   // 최대,최소값을 구하는
   const min = useMemo(() => {
     return Math.min.apply(
@@ -97,7 +96,6 @@ const BarChart = ({ props }: Props) => {
         options: {
           scales: {
             y: {
-              beginAtZero: true,
               ticks: {
                 stepSize: getStepSize(min, max),
               },

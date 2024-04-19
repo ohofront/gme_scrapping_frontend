@@ -1,35 +1,76 @@
-import { View } from "../../models/view/viewModel"
+import { HistoricalViewModel, View } from "../../models/view/viewModel"
 
-
-export const defaultHistoricalViewDummy: View[] =[
+export const defaultHistoricalViewDummy: HistoricalViewModel = 
+{
+    id: 1,
+    company: 'JRF',
+    competitors: [
+        {
+            id: 1,
+            country: 'Nepal',
+            amount: 158368200,
+            date: '2024-04-19 13:15:00'
+        },
+        {
+            id: 2,
+            country: 'Nepal',
+            amount: 157975100,
+            date: '2024-04-19 13:15:00'
+        },
+        {
+            id: 3,
+            country: 'Nepal',
+            amount: 157800900,
+            date: '2024-04-19 13:15:00'
+        },
+        {
+            id: 4,
+            country: 'Nepal',
+            amount: 181817600,
+            date: '2024-04-19 13:15:00'
+        },
+        {
+            id: 5,
+            country: 'Nepal',
+            amount: 157493500,
+            date: '2024-04-19 13:15:00'
+        },
+    ]
+}
+export const defaultHistoricalViewArrayDummy: HistoricalViewModel[] =[
     {
         id: 1,
-        country: 'India',
+        company: 'JRF',
         competitors: [
             {
                 id: 1,
-                company: 'JRF',
+                country: 'Nepal',
                 amount: 158368200,
+                date: '2024-04-19 13:15:00'
             },
             {
                 id: 2,
-                company: 'Sentbe',
+                country: 'Nepal',
                 amount: 157975100,
+                date: '2024-04-19 13:15:00'
             },
             {
                 id: 3,
-                company: 'E9pay',
+                country: 'Nepal',
                 amount: 157800900,
+                date: '2024-04-19 13:15:00'
             },
             {
                 id: 4,
-                company: 'GME',
+                country: 'Nepal',
                 amount: 181817600,
+                date: '2024-04-19 13:15:00'
             },
             {
                 id: 5,
-                company: 'Gmoney',
+                country: 'Nepal',
                 amount: 157493500,
+                date: '2024-04-19 13:15:00'
             },
         ]
     }

@@ -22,8 +22,6 @@ const LineChart = ({ props }: Props) => {
   useEffect(() => {
     let tempList: Dataset[] = [];
     tempList = list.map((item) => {
-      console.log("list", list);
-
       return {
         label: item.country,
         data: item.competitors.map((sub) => sub.amount),
