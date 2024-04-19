@@ -15,9 +15,16 @@ import { currencyFormatter } from "../../function/currencyFormatter";
 import Timer from "../../component/Timer";
 import DateInput from "../../component/DateInput";
 import moment from "moment";
-import { View } from "../../models/view/viewModel";
+import { HistoricalViewModel, View } from "../../models/view/viewModel";
 import Loading from "../../component/Loading";
 import DateSelect from "../../component/DatePicker";
+import Dropdown from "../../component/Dropdown";
+import { countries } from "../../enum/country";
+import { getHistoricalView } from "../../api/HistoricalView";
+import LineChart2 from "../../component/LineChart2";
+import { Tab, HistoryTab } from "../../models/common/tabModel";
+import TabMenu from "../../component/TabMenu";
+import FeedTab from "../../component/FeedTab";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -36,11 +43,12 @@ const HistoricalView = () => {
   const [history, setHistory] = useState<ResponseParams[]>([]);
   const [table, setTable] = useState<Table[]>([]);
   const [chart, setChart] = useState<View[]>([]);
+  const [chart2, setChart2] = useState<HistoricalViewModel[]>([]);
 
   const [startDate, setStartDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>("BDP01");
-  const [country, setCountry] = useState<string>("");
-  const [period, setPriod] = useState<string>("D");
+  const [country, setCountry] = useState<string>("Nepal");
+  const [period, setPeriod] = useState<string>("D");
 
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(60);
@@ -56,14 +64,16 @@ const HistoricalView = () => {
     });
   }, [period, startDate, method, country]);
 
+  useEffect(() => {
+    console.log("param:", param);
+  }, [param]);
+
   const fetch = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(
-        `${apiUrl}/GME/gme_scrap/pivot/history`,
-        { params: param }
-      );
-      console.log("response: ", response.data);
-      setHistory(response.data);
+      await getHistoricalView(param)
+        .then((response: any) => setHistory(response.data))
+        .catch((error) => console.log(error));
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -71,25 +81,69 @@ const HistoricalView = () => {
   };
 
   useEffect(() => {
-    const groupValues = history.reduce((acc: any, cur: any) => {
+    const chartValues = history.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
         (item: any) => item.country === cur.SentNation
       );
       if (countryIndex === -1) {
         acc.push({
           country: cur.SentNation,
-          competitors: [{ company: cur.SiteName, amount: cur.RecvAmt }],
+          competitors: [
+            {
+              company: cur.SiteName,
+              info: [
+                {
+                  amount: cur.RecvAmt,
+                  date: cur.ScrapDTTM,
+                },
+              ],
+            },
+          ],
         });
       } else {
         acc[countryIndex].competitors.push({
           company: cur.SiteName,
-          amount: cur.RecvAmt,
+          info: [
+            {
+              amount: cur.RecvAmt,
+              date: cur.ScrapDTTM,
+            },
+          ],
         });
       }
       return acc;
     }, []);
-    console.log("groupValues", groupValues);
-    setChart(groupValues);
+    console.log("Historical chartValues", chartValues);
+    setChart(chartValues);
+  }, [history]);
+
+  useEffect(() => {
+    const reuninedValues = history.reduce((acc: any, cur: any) => {
+      const companyIndex = acc.findIndex(
+        (item: any) => item.company === cur.SiteName
+      );
+      if (companyIndex === -1) {
+        acc.push({
+          company: cur.SiteName,
+          competitors: [
+            {
+              country: cur.SentNation,
+              amount: cur.RecvAmt,
+              date: cur.ScrapDTTM,
+            },
+          ],
+        });
+      } else {
+        acc[companyIndex].competitors.push({
+          country: cur.SentNation,
+          amount: cur.RecvAmt,
+          date: cur.ScrapDTTM,
+        });
+      }
+      return acc;
+    }, []);
+    console.log("reuninedValues", reuninedValues);
+    setChart2(reuninedValues);
   }, [history]);
 
   useEffect(() => {
@@ -112,7 +166,7 @@ const HistoricalView = () => {
       }
       return acc;
     }, []);
-    console.log("tableValues", tableValues);
+    console.log("Historical tableValues", tableValues);
     setTable(tableValues);
   }, [history]);
 
@@ -138,7 +192,13 @@ const HistoricalView = () => {
     <MainWrapper>
       <SearchBox>
         <div className="top">
-          <Timer count={count} />
+          {/* <Timer count={count} /> */}
+          <Dropdown
+            defaultTitle="국가"
+            optionData={countries}
+            currentOption={country}
+            setCurrentOption={setCountry}
+          />
           <DateTimeWrapper>
             {/* <DateInput
               defaultTitle="조회 시간"
@@ -151,7 +211,9 @@ const HistoricalView = () => {
             />
           </DateTimeWrapper>
         </div>
-        <div className="right"></div>
+        <div className="down">
+          <FeedTab period={period} setPeriod={setPeriod} />
+        </div>
       </SearchBox>
       <ContentWrapper>
         {loading ? (
@@ -162,7 +224,8 @@ const HistoricalView = () => {
               <DataTable headers={headers} items={table} selectable={false} />
             </TableWrapper> */}
             <ChartWrapper>
-              <LineChart props={chart} />
+              {/* <LineChart props={chart} /> */}
+              <LineChart2 props={chart2} />
             </ChartWrapper>
           </>
         ) : null}
@@ -180,7 +243,7 @@ const MainWrapper = styled.div`
 
 const SearchBox = styled.div`
   width: 100%;
-  height: 150px;
+  height: 300px;
   border: 1px solid #dddddd;
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -192,12 +255,11 @@ const SearchBox = styled.div`
     width: 100%;
     float: left;
   }
-  .right {
-    display: grid;
-    // grid-template-columns: 1fr 1.5fr 0.5fr;
-    // width: 70%;
-    width: 50%;
-    float: right;
+  .down {
+    display: flex;
+    grid-template-columns: 1fr;
+    width: 100%;
+    justify-content: center;
   }
 `;
 
