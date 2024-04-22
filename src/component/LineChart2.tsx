@@ -124,6 +124,11 @@ const LineChart2 = ({ props }: Props) => {
     };
   }, [dataset]);
 
-  return <canvas ref={chartRef} height={2000} width={1000} />;
+  return (
+    <canvas
+      ref={chartRef}
+      style={{ width: "300px", height: "1000px", padding: "50px 100px" }}
+    />
+  );
 };
 export default LineChart2;
