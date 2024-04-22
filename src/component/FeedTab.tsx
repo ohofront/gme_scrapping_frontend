@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { HistoryTab, Tab } from "../models/common/tabModel";
+import { lighten } from "polished";
 
 interface FeedTabProps {
   period: string;
@@ -12,21 +13,25 @@ const FeedTab = ({ period, setPeriod }: FeedTabProps) => {
   const tabClickHandler = (index: number) => {
     setCurrentTabIndex(index);
   };
-  const tabChangeHandler = (title: string) => {
-    setPeriod(title);
+  const tabChangeHandler = (value: string) => {
+    setPeriod(value);
   };
   const TabData: HistoryTab[] = [
     {
-      title: "D",
+      title: "DAY",
+      value: "D",
     },
     {
-      title: "W",
+      title: "WEEK",
+      value: "W",
     },
     {
-      title: "M",
+      title: "MONTH",
+      value: "M",
     },
     {
-      title: "Y",
+      title: "YEAR",
+      value: "Y",
     },
   ];
   return (
@@ -39,7 +44,7 @@ const FeedTab = ({ period, setPeriod }: FeedTabProps) => {
             $isActive={currentTabIndex === index}
             onClick={() => {
               tabClickHandler(index);
-              tabChangeHandler(tab.title);
+              tabChangeHandler(tab.value);
             }}
           >
             {tab.title}
@@ -63,10 +68,12 @@ const TabHeader = styled.ul`
 type TButtonProps = { $isActive: boolean | undefined };
 
 const TabButton = styled.button<TButtonProps>`
+  display: flex;
   border: none;
-  padding: 30px 30px;
-  background-color: ${(props) => (props.$isActive ? "#f0ece3" : "transparent")};
-  color: ${(props) => (props.$isActive ? "black" : "grey")};
+  border-radius: 10px;
+  padding: 20px 20px;
+  background-color: ${(props) => (props.$isActive ? "red" : "transparent")};
+  color: ${(props) => (props.$isActive ? "white" : "grey")};
   font-weight: 900;
   font-size: 20px;
   cursor: pointer;

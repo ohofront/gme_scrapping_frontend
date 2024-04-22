@@ -8,4 +8,5 @@ export interface Tab {
 
 export interface HistoryTab {
   title: string;
+  value: string;
 }
