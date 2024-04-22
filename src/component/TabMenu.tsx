@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Tab } from "../models/common/tabModel";
 import styled from "styled-components";
+import Header from "./Header";
 
 type TabMenuProps = {
   tabData: Tab[];
@@ -15,6 +16,7 @@ const TabMenu = ({ tabData }: TabMenuProps) => {
   return (
     <>
       <TabHeader>
+        <Header />
         {tabData.map((tab, index) => (
           <TabButton
             key={index}
@@ -32,7 +34,8 @@ const TabMenu = ({ tabData }: TabMenuProps) => {
 export default TabMenu;
 
 const TabHeader = styled.div`
-  background-color: #dcdcdc;
+  padding-left: 150px;
+  background-color: red;
   color: rgb(232, 234, 237);
   font-weight: bold;
   display: flex;
@@ -45,9 +48,9 @@ type TButtonProps = { $isActive: boolean | undefined };
 
 const TabButton = styled.button<TButtonProps>`
   border: none;
-  padding: 30px 30px;
+  padding: 30px 50px;
   background-color: ${(props) => (props.$isActive ? "#f0ece3" : "transparent")};
-  color: ${(props) => (props.$isActive ? "black" : "grey")};
+  color: ${(props) => (props.$isActive ? "black" : "white")};
   font-weight: 900;
   font-size: 20px;
   cursor: pointer;
