@@ -42,7 +42,7 @@ const DateSelectWrapper = styled.div`
   display: flex;
   position: relative;
   width: 100%;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   justify-content: center;
   text-align: center;
