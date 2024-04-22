@@ -151,7 +151,12 @@ const BarChart = ({ props }: Props) => {
     };
   }, [props]);
 
-  return <canvas ref={chartRef} height={300} width={300} />;
+  return (
+    <canvas
+      ref={chartRef}
+      style={{ width: "300px", height: "300px", padding: "20px 20px" }}
+    />
+  );
 };
 
 export default BarChart;
