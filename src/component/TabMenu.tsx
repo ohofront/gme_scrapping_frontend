@@ -31,7 +31,7 @@ const TabMenu = ({ tabData }: TabMenuProps) => {
 };
 export default TabMenu;
 
-const TabHeader = styled.ul`
+const TabHeader = styled.div`
   background-color: #dcdcdc;
   color: rgb(232, 234, 237);
   font-weight: bold;

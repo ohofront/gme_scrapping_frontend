@@ -95,6 +95,7 @@ const LiveView = () => {
       const countryIndex = acc.findIndex(
         (item: any) => item.country === cur.SentNation
       );
+
       if (countryIndex === -1) {
         acc.push({
           country: cur.SentNation,
@@ -309,13 +310,12 @@ const Content = styled.div`
 
 const SearchBox = styled.div`
   width: 100%;
-  height: 300px;
+  height: 200px;
   border: 1px solid #dddddd;
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
   margin-bottom: 50px;
-
   align-items: center;
   justify-content: center;
   .top {
@@ -327,7 +327,7 @@ const SearchBox = styled.div`
   }
   .down {
     display: grid;
-    grid-template-columns: 0.3fr 0.04fr 0.03fr;
+    grid-template-columns: 0.25fr 0.35fr;
     width: 100%;
     align-items: center;
     justify-content: center;

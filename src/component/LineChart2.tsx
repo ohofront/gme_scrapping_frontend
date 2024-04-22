@@ -46,7 +46,7 @@ const LineChart2 = ({ props }: Props) => {
 
   const getStepSize = (min: number, max: number) => {
     const range = max - min; // 최댓값과 최솟값 간의 범위를 계산
-    const interval = Math.ceil(range / 50); // 범위를 50등분하여 각 구간의 크기를 계산
+    const interval = Math.ceil(range / 3); // 범위를 50등분하여 각 구간의 크기를 계산
     const exponent = Math.floor(Math.log10(interval)); // 각 구간의 크기에 대한 로그 값을 계산
     const factor = Math.pow(10, exponent); // 10의 거듭제곱을 통해 가장 가까운 10의 배수로 구간 크기를 정규화
     return Math.ceil(interval / factor) * factor;

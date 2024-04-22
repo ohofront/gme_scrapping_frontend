@@ -261,22 +261,25 @@ const MainWrapper = styled.div`
 
 const SearchBox = styled.div`
   width: 100%;
-  height: 300px;
+  height: 200px;
   border: 1px solid #dddddd;
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
   margin-bottom: 50px;
+  align-items: center;
+  justify-content: center;
   .top {
     display: grid;
     grid-template-columns: 0.5fr 0.5fr;
     width: 100%;
-    float: left;
+    align-items: center;
+    justify-content: center;
   }
   .down {
-    display: flex;
-    grid-template-columns: 1fr;
+    display: grid;
     width: 100%;
+    align-items: center;
     justify-content: center;
   }
 `;
