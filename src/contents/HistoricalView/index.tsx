@@ -1,9 +1,5 @@
 import styled from "styled-components";
-import { DataTable } from "../../component/DataTable";
-import { headers, items } from "../../dummy/DataTable";
-import { HistoricalListViewDummy } from "../../dummy/HistoricalView";
-import LineChart from "../../component/LineChart";
-import axios from "axios";
+import { defaultHistoricalViewArrayDummy } from "../../dummy/HistoricalView";
 import { useEffect, useState } from "react";
 import {
   Params,
@@ -11,10 +7,7 @@ import {
   ResponseParams,
 } from "../../models/api/apiModel";
 import { Table } from "../../models/table/tableModel";
-import { currencyFormatter } from "../../function/currencyFormatter";
 import Timer from "../../component/Timer";
-import DateInput from "../../component/DateInput";
-import moment from "moment";
 import { HistoricalViewModel, View } from "../../models/view/viewModel";
 import Loading from "../../component/Loading";
 import DateSelect from "../../component/DatePicker";
@@ -22,8 +15,6 @@ import Dropdown from "../../component/Dropdown";
 import { countries } from "../../enum/country";
 import { getHistoricalView } from "../../api/HistoricalView";
 import LineChart2 from "../../component/LineChart2";
-import { Tab, HistoryTab } from "../../models/common/tabModel";
-import TabMenu from "../../component/TabMenu";
 import FeedTab from "../../component/FeedTab";
 
 export const InitialParams: Params = {
@@ -36,14 +27,15 @@ export const InitialParams: Params = {
 };
 
 const HistoricalView = () => {
-  const apiUrl = process.env.REACT_APP_SERVICE_URL;
   const START_SECOND = 60;
 
   const [param, setParam] = useState<Params>(InitialParams);
   const [history, setHistory] = useState<ResponseParams[]>([]);
   const [table, setTable] = useState<Table[]>([]);
   const [chart, setChart] = useState<View[]>([]);
-  const [chart2, setChart2] = useState<HistoricalViewModel[]>([]);
+  const [chart2, setChart2] = useState<HistoricalViewModel[]>(
+    defaultHistoricalViewArrayDummy
+  );
 
   const [startDate, setStartDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>("BDP01");
@@ -63,10 +55,6 @@ const HistoricalView = () => {
       period: period,
     });
   }, [period, startDate, method, country]);
-
-  useEffect(() => {
-    console.log("param:", param);
-  }, [param]);
 
   const fetch = async () => {
     setLoading(true);
@@ -146,29 +134,29 @@ const HistoricalView = () => {
     setChart2(reuninedValues);
   }, [history]);
 
-  useEffect(() => {
-    const tableValues = history.reduce((acc: any, cur: any) => {
-      const countryIndex = acc.findIndex(
-        (item: any) => item.country === cur.SentNation
-      );
-      if (countryIndex === -1) {
-        acc.push({
-          country: cur.SentNation,
-          company: cur.SiteName,
-          amount: currencyFormatter(cur.RecvAmt),
-        });
-      } else {
-        acc.push({
-          country: cur.SentNation,
-          company: cur.SiteName,
-          amount: currencyFormatter(cur.RecvAmt),
-        });
-      }
-      return acc;
-    }, []);
-    console.log("Historical tableValues", tableValues);
-    setTable(tableValues);
-  }, [history]);
+  // useEffect(() => {
+  //   const tableValues = history.reduce((acc: any, cur: any) => {
+  //     const countryIndex = acc.findIndex(
+  //       (item: any) => item.country === cur.SentNation
+  //     );
+  //     if (countryIndex === -1) {
+  //       acc.push({
+  //         country: cur.SentNation,
+  //         company: cur.SiteName,
+  //         amount: currencyFormatter(cur.RecvAmt),
+  //       });
+  //     } else {
+  //       acc.push({
+  //         country: cur.SentNation,
+  //         company: cur.SiteName,
+  //         amount: currencyFormatter(cur.RecvAmt),
+  //       });
+  //     }
+  //     return acc;
+  //   }, []);
+  //   console.log("Historical tableValues", tableValues);
+  //   setTable(tableValues);
+  // }, [history]);
 
   // useEffect(() => {
   //   // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
@@ -238,11 +226,7 @@ const HistoricalView = () => {
           <Loading />
         ) : history.length > 0 ? (
           <>
-            {/* <TableWrapper>
-              <DataTable headers={headers} items={table} selectable={false} />
-            </TableWrapper> */}
             <ChartWrapper>
-              {/* <LineChart props={chart} /> */}
               <LineChart2 props={chart2} />
             </ChartWrapper>
           </>

@@ -1,22 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-// import { getLiveView } from "../../api/LiveView";
+import { useEffect, useState } from "react";
 import {
   Params,
   RemitMethodCode,
   ResponseParams,
 } from "../../models/api/apiModel";
 
-import axios from "axios";
-import SelectBox from "../../component/SelectBox";
 import styled from "styled-components";
 import { DataTable } from "../../component/DataTable";
-import { ListViewDummy } from "../../dummy/LiveView";
 import { View } from "../../models/view/viewModel";
-import { headers, items } from "../../dummy/DataTable";
+import { headers } from "../../dummy/DataTable";
 import BarChart from "../../component/BarChart";
-import DateSelect from "../../component/DatePicker";
 import Loading from "../../component/Loading";
-import SearchFunction from "../../component/SearchFunction";
 import { Table } from "../../models/table/tableModel";
 import { currencyFormatter } from "../../function/currencyFormatter";
 import DateInput from "../../component/DateInput";
@@ -50,12 +44,10 @@ const LiveView = () => {
   const [country, setCountry] = useState<string>("");
 
   const [loading, setLoading] = useState(true);
-  const timerRef = useRef(null);
 
   const START_SECOND = 60;
   const [count, setCount] = useState(60);
   const [isSearchModal, setIsSearchModal] = useState(false);
-  // const apiUrl = process.env.REACT_APP_SERVICE_URL;
 
   useEffect(() => {
     setParam({
@@ -149,7 +141,6 @@ const LiveView = () => {
   };
 
   const handleSearch = () => {
-    console.log("조회");
     setIsSearchModal(true);
   };
 
@@ -200,8 +191,6 @@ const LiveView = () => {
           >
             조회
           </Button>
-
-          {/* <SearchFunction defaultTitle="조회" /> */}
         </div>
         <div className="down">
           <DateTimeWrapper>
@@ -214,10 +203,6 @@ const LiveView = () => {
           <Timer count={count} />
         </div>
       </SearchBox>
-
-      {/* <DateTimeWrapper>
-           <DateInput defaultTitle="조회 시간" searchDate={moment(live[0]?.ScrapDTTM).format('YYYY-MM-DD HH:mm')} />
-         </DateTimeWrapper> */}
 
       <ContentWrapper>
         {loading ? (
