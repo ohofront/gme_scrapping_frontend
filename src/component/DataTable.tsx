@@ -1,14 +1,19 @@
 import { useState } from "react";
 
 export type DataTableTypes = {
-  headers: any,
-  items: any,
-  selectable: boolean,
-  itemKey?: any,
-  updateSelection?: any,
-}
-export const DataTable = ({ 
-  headers, items, selectable, itemKey, updateSelection = () => {} }: DataTableTypes) =>  {
+  headers: any;
+  items: any;
+  selectable: boolean;
+  itemKey?: any;
+  updateSelection?: any;
+};
+export const DataTable = ({
+  headers,
+  items,
+  selectable,
+  itemKey,
+  updateSelection = () => {},
+}: DataTableTypes) => {
   // headers가 있는지 체크하고, 없다면 에러를 던짐
   if (!headers || !headers.length) {
     throw new Error("<DataTable /> headers is required.");
@@ -19,7 +24,7 @@ export const DataTable = ({
   if (!itemKey) {
     itemKey = headerKey[0];
   }
-    // 선택한 row의 itemKey를 담은 배열
+  // 선택한 row의 itemKey를 담은 배열
   const [selection, setSelection] = useState(new Set());
   const onChangeSelect = (value: any) => {
     // 기존의 selection으로 새로운 Set 생성
@@ -62,9 +67,9 @@ export const DataTable = ({
     <table
       style={{
         backgroundColor: "white",
-        border: "1px solid #ddd",
         borderRadius: "10px",
         width: "600px",
+        padding: "30px 10px",
       }}
     >
       <thead>
@@ -81,7 +86,7 @@ export const DataTable = ({
           )}
           {headers.map((header: any) => (
             <th
-              style={{ padding: 20,  border: "1px solid #ddd", fontSize: 25  }}
+              style={{ padding: 20, border: "1px solid #ddd", fontSize: 25 }}
               key={header.text}
             >
               {header.text} {/* 컬럼명 바인딩 */}
@@ -91,7 +96,7 @@ export const DataTable = ({
       </thead>
       <tbody>
         {items.map((item: any, index: number) => (
-                    <tr
+          <tr
             key={index}
             className={`
             ${selection.has(item[itemKey]) ? "select_row" : ""} 
@@ -113,7 +118,12 @@ export const DataTable = ({
             {headerKey.map((key: string) => (
               <td
                 key={key + index}
-                style={{ minWidth: "10px", textAlign: "center", border: "1px solid #ddd", fontSize: 25 }}
+                style={{
+                  minWidth: "10px",
+                  textAlign: "center",
+                  border: "1px solid #ddd",
+                  fontSize: 25,
+                }}
               >
                 {item[key]} {/* key로 객체의 값을 출력 */}
               </td>
@@ -123,4 +133,4 @@ export const DataTable = ({
       </tbody>
     </table>
   );
-}
+};
