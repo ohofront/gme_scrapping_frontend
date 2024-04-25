@@ -70,10 +70,11 @@ export const DataTable = ({
         borderRadius: "10px",
         width: "600px",
         padding: "30px 10px",
+        borderSpacing: "0px",
       }}
     >
       <thead>
-        <tr>
+        <tr style={{ border: "3px solid black" }}>
           {/* 선택 기능을 사용할 때만 바인딩 */}
           {selectable && (
             <th>
@@ -86,7 +87,11 @@ export const DataTable = ({
           )}
           {headers.map((header: any) => (
             <th
-              style={{ padding: 20, border: "1px solid #ddd", fontSize: 25 }}
+              style={{
+                padding: 20,
+                border: "3px solid black",
+                fontSize: 25,
+              }}
               key={header.text}
             >
               {header.text} {/* 컬럼명 바인딩 */}
@@ -120,9 +125,10 @@ export const DataTable = ({
                 key={key + index}
                 style={{
                   minWidth: "10px",
+                  height: "50px",
                   textAlign: "center",
-                  border: "1px solid #ddd",
-                  fontSize: 25,
+                  border: "3px solid black",
+                  fontSize: 20,
                 }}
               >
                 {item[key]} {/* key로 객체의 값을 출력 */}
