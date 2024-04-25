@@ -22,6 +22,7 @@ import { remitMethods } from "../../enum/remitmethod";
 import Button from "../../component/Button";
 import { getLiveView } from "../../api/LiveView";
 import Modal from "../../component/Modal";
+import { LiveScrappingData } from "../../dummy/RowData";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -133,7 +134,10 @@ const LiveView = () => {
     try {
       await getLiveView(param)
         .then((response: any) => setLive(response.data))
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log("error$$$", error);
+          setLive(LiveScrappingData);
+        });
       setLoading(false);
     } catch (e) {
       console.log(e);

@@ -16,6 +16,7 @@ import { countries } from "../../enum/country";
 import { getHistoricalView } from "../../api/HistoricalView";
 import LineChart2 from "../../component/LineChart2";
 import FeedTab from "../../component/FeedTab";
+import { HistoryScrappingData } from "../../dummy/RowData";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -61,7 +62,10 @@ const HistoricalView = () => {
     try {
       await getHistoricalView(param)
         .then((response: any) => setHistory(response.data))
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          setHistory(HistoryScrappingData);
+        });
       setLoading(false);
     } catch (e) {
       console.log(e);
