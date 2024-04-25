@@ -254,12 +254,13 @@ const SearchBox = styled.div`
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
+  padding-top: 30px;
   margin-bottom: 50px;
   align-items: center;
   justify-content: center;
   .top {
     display: grid;
-    grid-template-columns: 0.5fr 0.5fr;
+    grid-template-columns: 0.2fr 0.4fr;
     width: 100%;
     align-items: center;
     justify-content: center;
