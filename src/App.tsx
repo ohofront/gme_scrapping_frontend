@@ -3,6 +3,7 @@ import { Tab } from "./models/common/tabModel";
 import TabMenu from "./component/TabMenu";
 import LiveView from "./contents/LiveView";
 import HistoricalView from "./contents/HistoricalView";
+import ScrollTop from "./component/TopButton";
 
 function App() {
   const TabData: Tab[] = [
@@ -15,7 +16,12 @@ function App() {
       content: <HistoricalView />,
     },
   ];
-  return <TabMenu tabData={TabData} />;
+  return (
+    <>
+      <ScrollTop />
+      <TabMenu tabData={TabData} />
+    </>
+  );
 }
 
 export default App;
