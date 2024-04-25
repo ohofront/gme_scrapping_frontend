@@ -285,7 +285,7 @@ const ChartWrapper = styled.div`
   background-color: #fff;
   float: right;
   display: grid;
-  grid-template-columns: 600px 600px;
+  grid-template-columns: 500px 500px;
   grid-gap: 50px;
 `;
 
