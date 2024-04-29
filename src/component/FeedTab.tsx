@@ -71,7 +71,7 @@ const TabButton = styled.button<TButtonProps>`
   display: flex;
   border: none;
   border-radius: 10px;
-  padding: 20px 20px;
+  padding: 10px 20px;
   background-color: ${(props) => (props.$isActive ? "red" : "transparent")};
   color: ${(props) => (props.$isActive ? "white" : "grey")};
   font-weight: 900;

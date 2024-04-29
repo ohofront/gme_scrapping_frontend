@@ -75,6 +75,7 @@ const LineChart2 = ({ props }: Props) => {
           "rgba(255, 159, 64, 1)",
         ],
         borderWidth: 2,
+        tension: 0.3,
       };
     });
     setDataset(tempList);
@@ -127,7 +128,7 @@ const LineChart2 = ({ props }: Props) => {
   return (
     <canvas
       ref={chartRef}
-      style={{ width: "300px", height: "1000px", padding: "50px 100px" }}
+      style={{ width: "300px", height: "800px", padding: "50px 100px" }}
     />
   );
 };

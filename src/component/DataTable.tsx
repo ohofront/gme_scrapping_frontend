@@ -69,8 +69,8 @@ export const DataTable = ({
         backgroundColor: "white",
         borderRadius: "10px",
         width: "600px",
-        padding: "30px 10px",
         borderSpacing: "0px",
+        border: "3px solid black",
       }}
     >
       <thead>
@@ -89,8 +89,8 @@ export const DataTable = ({
             <th
               style={{
                 padding: 20,
-                border: "3px solid black",
                 fontSize: 25,
+                border: "2px solid black",
               }}
               key={header.text}
             >
@@ -127,7 +127,7 @@ export const DataTable = ({
                   minWidth: "10px",
                   height: "50px",
                   textAlign: "center",
-                  border: "3px solid black",
+                  border: "2px solid black",
                   fontSize: 20,
                 }}
               >
