@@ -59,20 +59,42 @@ const LineChart2 = ({ props }: Props) => {
         label: item.company,
         data: item.competitors.map((sub) => sub.amount),
         backgroundColor: [
-          "rgba(255, 0, 0)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
+          item.company === "GME"
+            ? "rgba(255, 0, 0)"
+            : item.company === "hanpass"
+            ? "rgba(54, 162, 235, 1)"
+            : item.company === "gmoney"
+            ? "rgba(255, 206, 86, 1)"
+            : item.company === "Coinshot"
+            ? "rgba(75, 192, 192, 1)"
+            : item.company === "JRF"
+            ? "rgba(123,104,238)"
+            : item.company === "E9Pay"
+            ? "rgba(255,165,0)"
+            : item.company === "Moin"
+            ? "rgba(255,105,180)"
+            : item.company === "Cross"
+            ? "rgba(165,42,42)"
+            : "",
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
+          item.company === "GME"
+            ? "rgba(255, 0, 0)"
+            : item.company === "hanpass"
+            ? "rgba(54, 162, 235, 1)"
+            : item.company === "gmoney"
+            ? "rgba(255, 206, 86, 1)"
+            : item.company === "Coinshot"
+            ? "rgba(75, 192, 192, 1)"
+            : item.company === "JRF"
+            ? "rgba(123,104,238)"
+            : item.company === "E9Pay"
+            ? "rgba(255,165,0)"
+            : item.company === "Moin"
+            ? "rgba(255,105,180)"
+            : item.company === "Cross"
+            ? "rgba(165,42,42)"
+            : "",
         ],
         borderWidth: 2,
         tension: 0.3,
@@ -117,8 +139,8 @@ const LineChart2 = ({ props }: Props) => {
       }
     };
 
-    destroyChart();
-    createChart();
+    destroyChart(); // 기존 차트 파괴
+    createChart(); // 새로운 차트 생성
 
     return () => {
       destroyChart(); //컴포넌트가 unmount 될때 차트 파괴
