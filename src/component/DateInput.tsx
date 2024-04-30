@@ -1,31 +1,25 @@
 import styled from "styled-components";
 
 interface DateInputProps {
-    defaultTitle: string;
-    searchDate: string; 
-
+  defaultTitle: string;
+  searchDate: string;
 }
 
-const DateInput = ({defaultTitle, searchDate}: DateInputProps) => {
-    return(
-        <DateInputWrapper>
-            <DateInputTitle>
-               {defaultTitle}
-            </DateInputTitle>
-            <DateInputContent>
-             {searchDate}
-            </DateInputContent>
-           
-        </DateInputWrapper>
-    )
-}
+const DateInput = ({ defaultTitle, searchDate }: DateInputProps) => {
+  return (
+    <DateInputWrapper>
+      <DateInputTitle>{defaultTitle}</DateInputTitle>
+      <DateInputContent>{searchDate}</DateInputContent>
+    </DateInputWrapper>
+  );
+};
 export default DateInput;
 
 const DateInputWrapper = styled.div`
   display: flex;
   position: relative;
   width: 100%;
-  padding: 50px 0px;
+  padding: 10px 0px;
   gap: 10px;
   align-items: center;
   justify-content: center;
