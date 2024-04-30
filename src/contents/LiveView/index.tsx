@@ -155,17 +155,22 @@ const LiveView = () => {
       setCount((count) => count - 1);
     }, 1000);
     // 0이 되면 카운트가 멈춤
-    if (param) {
+    if (count === 0) {
       setLoading(true);
       setCount(START_SECOND);
     }
-    if (param) {
+    if (count === 60) {
       fetch();
     }
     return () => clearInterval(interval);
     // 카운트 변수가 바뀔때마다 useEffect 실행
-  }, [param]);
+  }, [count]);
 
+  useEffect(() => {
+    if (param) {
+      fetch();
+    }
+  }, [param]);
   return (
     <MainWrapper>
       <SearchBox>
@@ -182,10 +187,10 @@ const LiveView = () => {
             currentOption={method}
             setCurrentOption={setMethod}
           />
-          <DateInput
+          {/* <DateInput
             defaultTitle="조회 시간"
             searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
-          />
+          /> */}
           {/* <Button
             outline={false}
             color="red"
@@ -201,14 +206,14 @@ const LiveView = () => {
           </Button> */}
         </div>
         <div className="down">
-          {/* <DateTimeWrapper>
+          <DateTimeWrapper>
             <DateInput
-              defaultTitle="스크래핑 시간"
+              defaultTitle="조회 시간"
               searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
             />
           </DateTimeWrapper>
 
-          <Timer count={count} /> */}
+          <Timer count={count} />
         </div>
       </SearchBox>
 
@@ -304,7 +309,7 @@ const Content = styled.div`
 
 const SearchBox = styled.div`
   width: 100%;
-  height: 100px;
+  height: 200px;
   border: 1px solid #dddddd;
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -315,14 +320,14 @@ const SearchBox = styled.div`
   justify-content: center;
   .top {
     display: grid;
-    grid-template-columns: 0.2fr 0.2fr 0.2fr;
+    grid-template-columns: 0.3fr 0.3fr;
     width: 100%;
     align-items: center;
     justify-content: center;
   }
   .down {
     display: grid;
-    grid-template-columns: 0.25fr 0.35fr;
+    grid-template-columns: 0.3fr 0.3fr;
     width: 100%;
     align-items: center;
     justify-content: center;
