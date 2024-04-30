@@ -17,7 +17,6 @@ import { getHistoricalView } from "../../api/HistoricalView";
 import LineChart2 from "../../component/LineChart2";
 import FeedTab from "../../component/FeedTab";
 import { HistoryScrappingData } from "../../dummy/RowData";
-import LineChart3 from "../../component/LineChart3";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
