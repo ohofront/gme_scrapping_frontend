@@ -155,16 +155,16 @@ const LiveView = () => {
       setCount((count) => count - 1);
     }, 1000);
     // 0이 되면 카운트가 멈춤
-    if (count === 0) {
+    if (param) {
       setLoading(true);
       setCount(START_SECOND);
     }
-    if (count === 60) {
+    if (param) {
       fetch();
     }
     return () => clearInterval(interval);
     // 카운트 변수가 바뀔때마다 useEffect 실행
-  }, [count]);
+  }, [param]);
 
   return (
     <MainWrapper>
@@ -182,7 +182,11 @@ const LiveView = () => {
             currentOption={method}
             setCurrentOption={setMethod}
           />
-          <Button
+          <DateInput
+            defaultTitle="조회 시간"
+            searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
+          />
+          {/* <Button
             outline={false}
             color="red"
             font="black"
@@ -194,17 +198,17 @@ const LiveView = () => {
             disabled={false}
           >
             조회
-          </Button>
+          </Button> */}
         </div>
         <div className="down">
-          <DateTimeWrapper>
+          {/* <DateTimeWrapper>
             <DateInput
               defaultTitle="스크래핑 시간"
               searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
             />
           </DateTimeWrapper>
 
-          <Timer count={count} />
+          <Timer count={count} /> */}
         </div>
       </SearchBox>
 
@@ -300,7 +304,7 @@ const Content = styled.div`
 
 const SearchBox = styled.div`
   width: 100%;
-  height: 200px;
+  height: 100px;
   border: 1px solid #dddddd;
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
