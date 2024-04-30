@@ -17,6 +17,7 @@ import { getHistoricalView } from "../../api/HistoricalView";
 import LineChart2 from "../../component/LineChart2";
 import FeedTab from "../../component/FeedTab";
 import { HistoryScrappingData } from "../../dummy/RowData";
+import LineChart3 from "../../component/LineChart3";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -61,7 +62,11 @@ const HistoricalView = () => {
     setLoading(true);
     try {
       await getHistoricalView(param)
-        .then((response: any) => setHistory(response.data))
+        .then((response: any) => {
+          console.log("Historical response data:::", response.data);
+
+          setHistory(response.data);
+        })
         .catch((error) => {
           console.log(error);
           setHistory(HistoryScrappingData);
@@ -214,16 +219,17 @@ const HistoricalView = () => {
               defaultTitle="조회 시간"
               searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
             /> */}
-            <DateSelect
+            {/* <DateSelect
               defaultTitle="조회시간"
               startDate={startDate}
               setStartDate={setStartDate}
-            />
+            /> */}
+            <FeedTab period={period} setPeriod={setPeriod} />
           </DateTimeWrapper>
         </div>
-        <div className="down">
+        {/* <div className="down">
           <FeedTab period={period} setPeriod={setPeriod} />
-        </div>
+        </div> */}
       </SearchBox>
       <ContentWrapper>
         {loading ? (
@@ -232,6 +238,7 @@ const HistoricalView = () => {
           <>
             <ChartWrapper>
               <LineChart2 props={chart2} />
+              {/* <LineChart3 props={chart2} /> */}
             </ChartWrapper>
           </>
         ) : null}
@@ -249,13 +256,12 @@ const MainWrapper = styled.div`
 
 const SearchBox = styled.div`
   width: 100%;
-  height: 200px;
+  height: 100px;
   border: 1px solid #dddddd;
   border-radius: 12px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   vertical-align: middle;
   padding-top: 30px;
-  margin-bottom: 50px;
   align-items: center;
   justify-content: center;
   .top {
