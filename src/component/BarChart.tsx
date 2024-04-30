@@ -72,13 +72,14 @@ const BarChart = ({ props }: Props) => {
     const createChart = () => {
       Chart.register(...registerables);
       chartInstance = new Chart(ctx, {
-        type: "bar",
+        type: "line",
         data: {
           labels: props.competitors.map((item) => item.company),
           datasets: [
             {
               // label: props.country,
               // label: "GME",
+              type: "line",
               data: props.competitors.map((item) => item.amount),
               backgroundColor: [
                 "rgba(255, 0, 0)",
@@ -98,13 +99,42 @@ const BarChart = ({ props }: Props) => {
                 "rgba(255, 159, 64, 1)",
                 "rgba(255, 99, 135, 1)",
               ],
-              borderRadius: 10,
+              borderWidth: 3,
+              tension: 0,
+            },
+            {
+              // label: props.country,
+              // label: "GME",
+              type: "bar",
+              data: props.competitors.map((item) => item.amount),
+              backgroundColor: [
+                "rgba(255, 0, 0)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)",
+                "rgba(255, 99, 135, 1)",
+              ],
+              borderColor: [
+                "rgba(255, 0, 0)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)",
+                "rgba(255, 99, 135, 1)",
+              ],
+              borderRadius: 5,
             },
           ],
         },
         options: {
+          responsive: true,
+          color: "black",
           scales: {
             y: {
+              beginAtZero: false,
               ticks: {
                 stepSize: getStepSize(min, max),
               },
