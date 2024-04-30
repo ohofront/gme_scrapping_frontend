@@ -265,7 +265,7 @@ const SearchBox = styled.div`
   justify-content: center;
   .top {
     display: grid;
-    grid-template-columns: 0.2fr 0.4fr;
+    grid-template-columns: 0.3fr 0.3fr;
     width: 100%;
     align-items: center;
     justify-content: center;
