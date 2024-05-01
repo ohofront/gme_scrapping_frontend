@@ -40,14 +40,14 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
       >
         <thead>
           <tr style={{ border: "3px solid black" }}>
-            {headers.map((header: any) => (
+            {headers.map((header: any, index: number) => (
               <th
                 style={{
                   padding: 20,
                   fontSize: 25,
                   border: "2px solid black",
                 }}
-                key={header.text}
+                key={index}
               >
                 {header.text} {/* 컬럼명 바인딩 */}
               </th>
@@ -56,7 +56,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
         </thead>
         <tbody>
           {items.map((el: any, index: number) => (
-            <tr>
+            <tr key={index}>
               {rowSpan[index] > 0 && (
                 <td
                   style={{

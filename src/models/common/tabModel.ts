@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { HistoricalViewModel } from "../view/viewModel";
 
 export interface Tab {
-  title: string;
+  title: any;
   content: ReactNode;
 }
 

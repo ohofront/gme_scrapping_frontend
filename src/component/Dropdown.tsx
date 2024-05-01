@@ -3,7 +3,7 @@ import styled from "styled-components";
 import ClickOutSide from "./ClickOutside";
 
 interface DropDownProps {
-  defaultTitle: string;
+  defaultTitle: any;
   optionData: { key: number; value: string }[];
   currentOption: string;
   setCurrentOption: any;

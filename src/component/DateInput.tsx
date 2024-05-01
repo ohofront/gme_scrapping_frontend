@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface DateInputProps {
-  defaultTitle: string;
+  defaultTitle: any;
   searchDate: string;
 }
 

@@ -17,6 +17,7 @@ import { getHistoricalView } from "../../api/HistoricalView";
 import LineChart2 from "../../component/LineChart2";
 import FeedTab from "../../component/FeedTab";
 import { HistoryScrappingData } from "../../dummy/RowData";
+import { FormattedMessage } from "react-intl";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -208,7 +209,7 @@ const HistoricalView = () => {
         <div className="top">
           {/* <Timer count={count} /> */}
           <Dropdown
-            defaultTitle="국가"
+            defaultTitle={<FormattedMessage id="national" />}
             optionData={countries}
             currentOption={country}
             setCurrentOption={setCountry}

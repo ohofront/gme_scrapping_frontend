@@ -3,6 +3,7 @@ import { Tab } from "../models/common/tabModel";
 import styled from "styled-components";
 import Header from "./Header";
 import ToggleButton from "./ToggleButton";
+import ToggleButton2 from "./ToggleButton2";
 
 type TabMenuProps = {
   tabData: Tab[];
@@ -27,7 +28,8 @@ const TabMenu = ({ tabData }: TabMenuProps) => {
             {tab.title}
           </TabButton>
         ))}
-        <ToggleButton />
+        {/* <ToggleButton /> */}
+        <ToggleButton2 />
       </TabHeader>
       <TabContent>{tabData[activeIndex].content}</TabContent>
     </>

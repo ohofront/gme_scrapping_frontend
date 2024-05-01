@@ -4,15 +4,16 @@ import TabMenu from "./component/TabMenu";
 import LiveView from "./contents/LiveView";
 import HistoricalView from "./contents/HistoricalView";
 import ScrollTop from "./component/TopButton";
+import { FormattedMessage } from "react-intl";
 
 function App() {
   const TabData: Tab[] = [
     {
-      title: "LIVE VIEW",
+      title: <FormattedMessage id="liveview" />,
       content: <LiveView />,
     },
     {
-      title: "HISTORICAL VIEW",
+      title: <FormattedMessage id="historicalview" />,
       content: <HistoricalView />,
     },
   ];

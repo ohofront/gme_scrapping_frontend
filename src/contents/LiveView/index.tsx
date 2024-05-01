@@ -4,7 +4,7 @@ import {
   RemitMethodCode,
   ResponseParams,
 } from "../../models/api/apiModel";
-
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { DataTable } from "../../component/DataTable";
 import { View } from "../../models/view/viewModel";
@@ -177,13 +177,13 @@ const LiveView = () => {
       <SearchBox>
         <div className="top">
           <Dropdown
-            defaultTitle="국가"
+            defaultTitle={<FormattedMessage id="national" />}
             optionData={countries}
             currentOption={country}
             setCurrentOption={setCountry}
           />
           <Dropdown
-            defaultTitle="송금 코드"
+            defaultTitle={<FormattedMessage id="remit_code" />}
             optionData={remitMethods}
             currentOption={method}
             setCurrentOption={setMethod}
@@ -209,7 +209,7 @@ const LiveView = () => {
         <div className="down">
           <DateTimeWrapper>
             <DateInput
-              defaultTitle="조회 시간"
+              defaultTitle={<FormattedMessage id="scrap_date" />}
               searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
             />
           </DateTimeWrapper>

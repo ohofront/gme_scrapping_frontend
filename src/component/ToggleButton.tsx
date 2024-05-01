@@ -1,3 +1,4 @@
+import { set } from "date-fns";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -7,13 +8,22 @@ type ToggleType = {
 
 const ToggleButton = () => {
   const [latestSort, setLatestSort] = useState(true);
+  const [locale, setLocale] = useState(localStorage.getItem("locale") ?? "ko");
   useEffect(() => {
     console.log("latestSort:", latestSort);
   }, [latestSort]);
   const toggleHandler = () => {
     setLatestSort((prev) => !prev);
+    if (latestSort === true) {
+      setLocale("ko");
+    } else {
+      setLocale("eng");
+    }
   };
-
+  useEffect(() => {
+    console.log("locale:", locale);
+    localStorage.setItem("locale", locale);
+  }, [locale]);
   return (
     <BtnWrapper>
       <CheckBox type="checkbox" id="toggleBtn" onChange={toggleHandler} />
