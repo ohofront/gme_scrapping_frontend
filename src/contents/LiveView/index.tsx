@@ -23,6 +23,7 @@ import Button from "../../component/Button";
 import { getLiveView } from "../../api/LiveView";
 import Modal from "../../component/Modal";
 import { LiveScrappingData } from "../../dummy/RowData";
+import DataTable2 from "../../component/DataTable2";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -223,7 +224,8 @@ const LiveView = () => {
         ) : live.length > 0 ? (
           <>
             <TableWrapper>
-              <DataTable headers={headers} items={table} selectable={false} />
+              {/* <DataTable headers={headers} items={table} selectable={false} /> */}
+              <DataTable2 items={table} headers={headers} />
             </TableWrapper>
             <ChartWrapper>
               {chart.map((item: View, index: number) => {
