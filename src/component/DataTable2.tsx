@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { FormattedMessage } from "react-intl";
 
 export type DataTableTypes = {
   items: any;
@@ -40,18 +41,42 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
       >
         <thead>
           <tr style={{ border: "3px solid black" }}>
-            {headers.map((header: any, index: number) => (
-              <th
-                style={{
-                  padding: 20,
-                  fontSize: 25,
-                  border: "2px solid black",
-                }}
-                key={index}
-              >
-                {header.text} {/* 컬럼명 바인딩 */}
-              </th>
-            ))}
+            <th
+              style={{
+                padding: 20,
+                fontSize: 25,
+                border: "2px solid black",
+              }}
+            >
+              <FormattedMessage id="national" />
+            </th>
+            <th
+              style={{
+                padding: 5,
+                fontSize: 25,
+                border: "2px solid black",
+              }}
+            >
+              <FormattedMessage id="currency_unit" />
+            </th>
+            <th
+              style={{
+                padding: 20,
+                fontSize: 25,
+                border: "2px solid black",
+              }}
+            >
+              <FormattedMessage id="competiter" />
+            </th>
+            <th
+              style={{
+                padding: 20,
+                fontSize: 25,
+                border: "2px solid black",
+              }}
+            >
+              <FormattedMessage id="amount" />
+            </th>
           </tr>
         </thead>
         <tbody>

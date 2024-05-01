@@ -3,5 +3,8 @@
   "national": "Nation",
   "liveview": "Live View",
   "historicalview": "Historical View",
-  "scrap_date": "Scrapping Date"
+  "scrap_date": "Scrapping Date",
+  "currency_unit": "Currency Unit",
+  "competiter": "Competiters",
+  "amount": "Amount"
 }
