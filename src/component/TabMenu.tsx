@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Tab } from "../models/common/tabModel";
 import styled from "styled-components";
 import Header from "./Header";
+import ToggleButton from "./ToggleButton";
 
 type TabMenuProps = {
   tabData: Tab[];
@@ -26,6 +27,7 @@ const TabMenu = ({ tabData }: TabMenuProps) => {
             {tab.title}
           </TabButton>
         ))}
+        <ToggleButton />
       </TabHeader>
       <TabContent>{tabData[activeIndex].content}</TabContent>
     </>
@@ -48,7 +50,7 @@ type TButtonProps = { $isActive: boolean | undefined };
 
 const TabButton = styled.button<TButtonProps>`
   border: none;
-  padding: 30px 50px;
+  padding: 30px 100px;
   background-color: ${(props) => (props.$isActive ? "#f0ece3" : "transparent")};
   color: ${(props) => (props.$isActive ? "black" : "white")};
   font-weight: 900;
