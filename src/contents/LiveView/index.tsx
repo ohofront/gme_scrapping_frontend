@@ -80,7 +80,6 @@ const LiveView = () => {
       }
       return acc;
     }, []);
-    console.log("chartValues", chartValues);
     setChart(chartValues);
   }, [live]);
 
@@ -109,7 +108,6 @@ const LiveView = () => {
       }
       return acc;
     }, []);
-    console.log("tableValues", tableValues);
     setTable(tableValues);
   }, [live]);
 

@@ -110,7 +110,6 @@ const HistoricalView = () => {
       }
       return acc;
     }, []);
-    console.log("Historical chartValues", chartValues);
     setChart(chartValues);
   }, [history]);
 
@@ -139,7 +138,6 @@ const HistoricalView = () => {
       }
       return acc;
     }, []);
-    console.log("reuninedValues", reuninedValues);
     setChart2(reuninedValues);
   }, [history]);
 
