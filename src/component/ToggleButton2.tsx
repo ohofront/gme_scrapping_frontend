@@ -79,7 +79,6 @@ const LangMenu = styled.ul`
 const MenuItem = styled.li`
   display: flex;
   align-items: center;
-
   float: left;
   list-style: none;
   outline: 0 none;
@@ -104,7 +103,7 @@ const MenuItem = styled.li`
     left: 0;
     box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08);
     position: absolute;
-    top: 130%;
+    top: 140%;
     list-style: none outside none;
     margin: 0;
     z-index: 1000;
@@ -112,9 +111,17 @@ const MenuItem = styled.li`
   }
   .item {
     cursor: pointer;
-    padding: 10px;
+    padding: 20px;
     transition: background 0.1s linear;
     list-style: none outside none;
+    .lang_name {
+      padding-left: 5px;
+    }
+    &:hover {
+      background-color: red;
+      color: #fff;
+      cursor: pointer;
+    }
   }
 `;
 const LangSelectA = styled.a`
