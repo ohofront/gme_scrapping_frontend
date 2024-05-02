@@ -23,9 +23,6 @@ const BarChart = ({ props }: Props) => {
     setCompany(props?.competitors.map((item) => item.company));
   }, [props]);
 
-  useEffect(() => {
-    console.log(company);
-  }, [company]);
   // 최대,최소값을 구하는
   const min = useMemo(() => {
     return Math.min.apply(
@@ -131,8 +128,6 @@ const BarChart = ({ props }: Props) => {
               tension: 0,
             },
             {
-              // label: props.country,
-              // label: "GME",
               type: "bar",
               data: props.competitors.map((item) => item.amount),
               backgroundColor: company?.map((item: string) =>
@@ -191,7 +186,7 @@ const BarChart = ({ props }: Props) => {
               ticks: {
                 color: "black",
                 font: {
-                  size: 17,
+                  size: 11,
                   weight: "bold",
                 },
               },
