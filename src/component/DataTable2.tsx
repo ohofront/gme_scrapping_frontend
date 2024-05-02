@@ -53,7 +53,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
             <th
               style={{
                 padding: 5,
-                fontSize: 25,
+                fontSize: 20,
                 border: "2px solid black",
               }}
             >
