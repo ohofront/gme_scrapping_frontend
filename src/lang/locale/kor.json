@@ -1,10 +1,11 @@
 {
   "remit_code": "송금 코드",
   "national": "국가",
-  "liveview": "라이브 뷰",
-  "historicalview": "시간적인 뷰",
+  "liveview": "실시간 화면",
+  "historicalview": "통계 화면",
   "scrap_date": "조회 시간",
   "currency_unit": "환전 단위",
   "competiter": "경쟁사",
-  "amount": "금액"
+  "amount": "금액",
+  "scrap_after_second": "초 후에 조회됩니다"
 }

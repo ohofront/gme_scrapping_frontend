@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FaPlay, FaStop } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
 
 type TimerProps = {
   count: number;
@@ -11,6 +12,7 @@ const Timer = ({ count }: TimerProps) => {
   const [isRunning, setIsRunning] = useState(false);
   const [currentSeconds, setSeconds] = useState(count);
   const [duration, setDuration] = useState(START_DURATION);
+  const locale = localStorage.getItem("locale") ?? "ko";
 
   const resetHandler = () => {
     setSeconds(count);
@@ -77,7 +79,22 @@ const Timer = ({ count }: TimerProps) => {
         />
       )} */}
       {/* <img src={playIcon} alt="play_icon" style={{ height: 30 }} /> */}
-      <TimerTitle>{count}초 후에 조회됩니다..</TimerTitle>
+      <TimerTitle>
+        {locale === "ko" ? (
+          <>
+            {count}
+            <FormattedMessage id="scrap_after_second" />
+          </>
+        ) : (
+          <>
+            <FormattedMessage id="scrap_after" />
+            &nbsp;
+            {count}
+            &nbsp;
+            <FormattedMessage id="seconds" />
+          </>
+        )}
+      </TimerTitle>
     </TimerWrapper>
   );
 };

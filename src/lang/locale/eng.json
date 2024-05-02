@@ -6,5 +6,8 @@
   "scrap_date": "Scrapping Date",
   "currency_unit": "Currency Unit",
   "competiter": "Competiters",
-  "amount": "Amount"
+  "amount": "Amount",
+  "scrap_after_second": "scrap after secondes ",
+  "scrap_after": "scrap after",
+  "seconds": "seconds"
 }
