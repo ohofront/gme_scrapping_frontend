@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Chart, registerables } from "chart.js";
 import { defaultListViewDummy } from "../dummy/LiveView";
-import { View } from "../models/view/viewModel";
+import { Competitor, View } from "../models/view/viewModel";
 
 interface Props {
   props: View;
@@ -9,6 +9,7 @@ interface Props {
 const BarChart = ({ props }: Props) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [list, setList] = useState<View>(defaultListViewDummy);
+  const [company, setCompany] = useState<string[]>([]);
   // const [dataset, setDataset] = useState<Dataset>();
 
   let chartInstance: any = null;
@@ -16,8 +17,15 @@ const BarChart = ({ props }: Props) => {
 
   useEffect(() => {
     setList(props);
-  }, [list, props]);
+  }, [props]);
 
+  useEffect(() => {
+    setCompany(props?.competitors.map((item) => item.company));
+  }, [props]);
+
+  useEffect(() => {
+    console.log(company);
+  }, [company]);
   // 최대,최소값을 구하는
   const min = useMemo(() => {
     return Math.min.apply(
@@ -80,26 +88,46 @@ const BarChart = ({ props }: Props) => {
               // label: props.country,
               // label: "GME",
               type: "line",
-              data: props.competitors.map((item) => item.amount),
-              backgroundColor: [
-                "rgba(255, 0, 0)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-                "rgba(255, 99, 135, 1)",
-              ],
-              borderColor: [
-                "rgba(255, 0, 0)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-                "rgba(255, 99, 135, 1)",
-              ],
-              borderWidth: 3,
+              data: props.competitors.map((item: Competitor) => item.amount),
+              backgroundColor: company?.map((item: string) =>
+                item === "GME"
+                  ? "rgba(255, 0, 0)"
+                  : item === "hanpass"
+                  ? "rgba(54, 162, 235, 1)"
+                  : item === "gmoney"
+                  ? "rgba(255, 206, 86, 1)"
+                  : item === "Coinshot"
+                  ? "rgba(75, 192, 192, 1)"
+                  : item === "JRF"
+                  ? "rgba(123,104,238)"
+                  : item === "E9Pay"
+                  ? "rgba(255,165,0)"
+                  : item === "Moin"
+                  ? "rgba(255,105,180)"
+                  : item === "Cross"
+                  ? "rgba(165,42,42)"
+                  : ""
+              ),
+              borderColor: company?.map((item: string) =>
+                item === "GME"
+                  ? "rgba(255, 0, 0)"
+                  : item === "hanpass"
+                  ? "rgba(54, 162, 235, 1)"
+                  : item === "gmoney"
+                  ? "rgba(255, 206, 86, 1)"
+                  : item === "Coinshot"
+                  ? "rgba(75, 192, 192, 1)"
+                  : item === "JRF"
+                  ? "rgba(123,104,238)"
+                  : item === "E9Pay"
+                  ? "rgba(255,165,0)"
+                  : item === "Moin"
+                  ? "rgba(255,105,180)"
+                  : item === "Cross"
+                  ? "rgba(165,42,42)"
+                  : ""
+              ),
+              borderWidth: 2,
               tension: 0,
             },
             {
@@ -107,24 +135,44 @@ const BarChart = ({ props }: Props) => {
               // label: "GME",
               type: "bar",
               data: props.competitors.map((item) => item.amount),
-              backgroundColor: [
-                "rgba(255, 0, 0)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-                "rgba(255, 99, 135, 1)",
-              ],
-              borderColor: [
-                "rgba(255, 0, 0)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-                "rgba(255, 99, 135, 1)",
-              ],
+              backgroundColor: company?.map((item: string) =>
+                item === "GME"
+                  ? "rgba(255, 0, 0)"
+                  : item === "hanpass"
+                  ? "rgba(54, 162, 235, 1)"
+                  : item === "gmoney"
+                  ? "rgba(255, 206, 86, 1)"
+                  : item === "Coinshot"
+                  ? "rgba(75, 192, 192, 1)"
+                  : item === "JRF"
+                  ? "rgba(123,104,238)"
+                  : item === "E9Pay"
+                  ? "rgba(255,165,0)"
+                  : item === "Moin"
+                  ? "rgba(255,105,180)"
+                  : item === "Cross"
+                  ? "rgba(165,42,42)"
+                  : "black"
+              ),
+              borderColor: company?.map((item: string) =>
+                item === "GME"
+                  ? "rgba(255, 0, 0)"
+                  : item === "hanpass"
+                  ? "rgba(54, 162, 235, 1)"
+                  : item === "gmoney"
+                  ? "rgba(255, 206, 86, 1)"
+                  : item === "Coinshot"
+                  ? "rgba(75, 192, 192, 1)"
+                  : item === "JRF"
+                  ? "rgba(123,104,238)"
+                  : item === "E9Pay"
+                  ? "rgba(255,165,0)"
+                  : item === "Moin"
+                  ? "rgba(255,105,180)"
+                  : item === "Cross"
+                  ? "rgba(165,42,42)"
+                  : "black"
+              ),
               borderRadius: 5,
             },
           ],
@@ -188,7 +236,7 @@ const BarChart = ({ props }: Props) => {
     return () => {
       destroyChart(); // 컴포넌트가 unmount될 때 차트 파괴
     };
-  }, [props]);
+  }, [props, company]);
 
   return (
     <canvas
