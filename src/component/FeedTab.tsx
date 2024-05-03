@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { HistoryTab, Tab } from "../models/common/tabModel";
 import { lighten } from "polished";
+import { FormattedMessage } from "react-intl";
 
 interface FeedTabProps {
   period: string;
@@ -18,19 +19,19 @@ const FeedTab = ({ period, setPeriod }: FeedTabProps) => {
   };
   const TabData: HistoryTab[] = [
     {
-      title: "DAY",
+      title: <FormattedMessage id="day" />,
       value: "D",
     },
     {
-      title: "WEEK",
+      title: <FormattedMessage id="week" />,
       value: "W",
     },
     {
-      title: "MONTH",
+      title: <FormattedMessage id="month" />,
       value: "M",
     },
     {
-      title: "YEAR",
+      title: <FormattedMessage id="year" />,
       value: "Y",
     },
   ];

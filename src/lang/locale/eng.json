@@ -9,5 +9,9 @@
   "amount": "Amount",
   "scrap_after_second": "scrap after secondes ",
   "scrap_after": "scrap after",
-  "seconds": "seconds"
+  "seconds": "seconds",
+  "day": "DAY",
+  "week": "WEEK",
+  "month": "MONTH",
+  "year": "YEAR"
 }

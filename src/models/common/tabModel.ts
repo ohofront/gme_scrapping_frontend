@@ -7,6 +7,6 @@ export interface Tab {
 }
 
 export interface HistoryTab {
-  title: string;
+  title: any;
   value: string;
 }

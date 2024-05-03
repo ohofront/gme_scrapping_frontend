@@ -7,5 +7,9 @@
   "currency_unit": "환전 단위",
   "competiter": "경쟁사",
   "amount": "금액",
-  "scrap_after_second": "초 후에 조회됩니다"
+  "scrap_after_second": "초 후에 조회됩니다",
+  "day": "일간",
+  "week": "주간",
+  "month": "월간",
+  "year": "연간"
 }
