@@ -121,6 +121,9 @@ const LineChart2 = ({ props }: Props) => {
         options: {
           maintainAspectRatio: false,
           scales: {
+            x: {
+              display: false,
+            },
             y: {
               ticks: {
                 stepSize: getStepSize(min, max),
