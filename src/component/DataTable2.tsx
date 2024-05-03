@@ -8,7 +8,7 @@ export type DataTableTypes = {
 
 const DataTable2 = ({ items, headers }: DataTableTypes) => {
   let namesArr: any = {};
-  const rowSpan = items.reduce((result: any, item: any, key: any) => {
+  const countryRowSpan = items.reduce((result: any, item: any, key: any) => {
     if (namesArr[item.country] === undefined) {
       namesArr[item.country] = key;
       result[key] = 1;
@@ -28,6 +28,26 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
     return result;
   }, []);
 
+  const changeunitRowSpan = items.reduce((result: any, item: any, key: any) => {
+    if (namesArr[item.changeunit] === undefined) {
+      namesArr[item.changeunit] = key;
+      result[key] = 1;
+    } else {
+      const firstIndex = namesArr[item.changeunit];
+      if (
+        firstIndex === key - 1 ||
+        (item.changeunit === items[key - 1].changeunit && result[key - 1] === 0)
+      ) {
+        result[firstIndex]++;
+        result[key] = 0;
+      } else {
+        result[key] = 1;
+        namesArr[item.changeunit] = key;
+      }
+    }
+    return result;
+  }, []);
+
   return (
     <div>
       <table
@@ -36,16 +56,31 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
           borderRadius: "10px",
           width: "600px",
           borderSpacing: "0px",
-          border: "3px solid black",
+          border: "3px solid white",
         }}
       >
-        <thead>
-          <tr style={{ border: "3px solid black" }}>
+        <thead
+          style={{
+            borderRadius: "10px",
+            width: "600px",
+            borderSpacing: "0px",
+            border: "3px solid white",
+          }}
+        >
+          <tr
+            style={{
+              border: "3px solid white",
+              backgroundColor: "red",
+              color: "white",
+              borderRadius: "10px",
+            }}
+          >
             <th
               style={{
                 padding: 20,
                 fontSize: 25,
-                border: "2px solid black",
+                border: "2px solid white",
+                borderRadius: "10px",
               }}
             >
               <FormattedMessage id="national" />
@@ -54,7 +89,8 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
               style={{
                 padding: 5,
                 fontSize: 20,
-                border: "2px solid black",
+                border: "2px solid white",
+                borderRadius: "10px",
               }}
             >
               <FormattedMessage id="currency_unit" />
@@ -63,7 +99,8 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
               style={{
                 padding: 20,
                 fontSize: 25,
-                border: "2px solid black",
+                border: "2px solid white",
+                borderRadius: "10px",
               }}
             >
               <FormattedMessage id="competiter" />
@@ -72,7 +109,8 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
               style={{
                 padding: 20,
                 fontSize: 25,
-                border: "2px solid black",
+                border: "2px solid white",
+                borderRadius: "10px",
               }}
             >
               <FormattedMessage id="amount" />
@@ -81,32 +119,39 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
         </thead>
         <tbody>
           {items.map((el: any, index: number) => (
-            <tr key={index}>
-              {rowSpan[index] > 0 && (
+            <tr
+              key={index}
+              style={{
+                border: "3px solid white",
+                backgroundColor: "red",
+                color: "white",
+              }}
+            >
+              {countryRowSpan[index] > 0 && (
                 <td
                   style={{
                     minWidth: "10px",
                     height: "50px",
                     textAlign: "center",
-                    border: "2px solid black",
+                    border: "2px solid white",
                     fontSize: 20,
                   }}
-                  rowSpan={rowSpan[index]}
+                  rowSpan={countryRowSpan[index]}
                 >
                   {el.country}
                 </td>
               )}
 
-              {rowSpan[index] > 0 && (
+              {changeunitRowSpan[index] > 0 && (
                 <td
                   style={{
                     minWidth: "10px",
                     height: "50px",
                     textAlign: "center",
-                    border: "2px solid black",
+                    border: "2px solid white",
                     fontSize: 20,
                   }}
-                  rowSpan={rowSpan[index]}
+                  rowSpan={changeunitRowSpan[index]}
                 >
                   {el.changeunit}
                 </td>
@@ -116,7 +161,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
                   minWidth: "10px",
                   height: "50px",
                   textAlign: "center",
-                  border: "2px solid black",
+                  border: "2px solid white",
                   fontSize: 20,
                 }}
               >
@@ -127,7 +172,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
                   minWidth: "10px",
                   height: "50px",
                   textAlign: "center",
-                  border: "2px solid black",
+                  border: "2px solid white",
                   fontSize: 20,
                 }}
               >
