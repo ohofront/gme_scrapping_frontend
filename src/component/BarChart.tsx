@@ -77,56 +77,54 @@ const BarChart = ({ props }: Props) => {
     const createChart = () => {
       Chart.register(...registerables);
       chartInstance = new Chart(ctx, {
-        type: "line",
+        type: "bar",
         data: {
           labels: props.competitors.map((item) => item.company),
           datasets: [
-            {
-              // label: props.country,
-              // label: "GME",
-              type: "line",
-              data: props.competitors.map((item: Competitor) => item.amount),
-              backgroundColor: company?.map((item: string) =>
-                item === "GME"
-                  ? "rgba(255, 0, 0)"
-                  : item === "hanpass"
-                  ? "rgba(54, 162, 235, 1)"
-                  : item === "gmoney"
-                  ? "rgba(255, 206, 86, 1)"
-                  : item === "Coinshot"
-                  ? "rgba(75, 192, 192, 1)"
-                  : item === "JRF"
-                  ? "rgba(123,104,238)"
-                  : item === "E9Pay"
-                  ? "rgba(255,165,0)"
-                  : item === "Moin"
-                  ? "rgba(255,105,180)"
-                  : item === "Cross"
-                  ? "rgba(165,42,42)"
-                  : ""
-              ),
-              borderColor: company?.map((item: string) =>
-                item === "GME"
-                  ? "rgba(255, 0, 0)"
-                  : item === "hanpass"
-                  ? "rgba(54, 162, 235, 1)"
-                  : item === "gmoney"
-                  ? "rgba(255, 206, 86, 1)"
-                  : item === "Coinshot"
-                  ? "rgba(75, 192, 192, 1)"
-                  : item === "JRF"
-                  ? "rgba(123,104,238)"
-                  : item === "E9Pay"
-                  ? "rgba(255,165,0)"
-                  : item === "Moin"
-                  ? "rgba(255,105,180)"
-                  : item === "Cross"
-                  ? "rgba(165,42,42)"
-                  : ""
-              ),
-              borderWidth: 2,
-              tension: 0,
-            },
+            // {
+            //   type: "line",
+            //   data: props.competitors.map((item: Competitor) => item.amount),
+            //   backgroundColor: company?.map((item: string) =>
+            //     item === "GME"
+            //       ? "rgba(255, 0, 0)"
+            //       : item === "hanpass"
+            //       ? "rgba(54, 162, 235, 1)"
+            //       : item === "gmoney"
+            //       ? "rgba(255, 206, 86, 1)"
+            //       : item === "Coinshot"
+            //       ? "rgba(75, 192, 192, 1)"
+            //       : item === "JRF"
+            //       ? "rgba(123,104,238)"
+            //       : item === "E9Pay"
+            //       ? "rgba(255,165,0)"
+            //       : item === "Moin"
+            //       ? "rgba(255,105,180)"
+            //       : item === "Cross"
+            //       ? "rgba(165,42,42)"
+            //       : ""
+            //   ),
+            //   borderColor: company?.map((item: string) =>
+            //     item === "GME"
+            //       ? "rgba(255, 0, 0)"
+            //       : item === "hanpass"
+            //       ? "rgba(54, 162, 235, 1)"
+            //       : item === "gmoney"
+            //       ? "rgba(255, 206, 86, 1)"
+            //       : item === "Coinshot"
+            //       ? "rgba(75, 192, 192, 1)"
+            //       : item === "JRF"
+            //       ? "rgba(123,104,238)"
+            //       : item === "E9Pay"
+            //       ? "rgba(255,165,0)"
+            //       : item === "Moin"
+            //       ? "rgba(255,105,180)"
+            //       : item === "Cross"
+            //       ? "rgba(165,42,42)"
+            //       : ""
+            //   ),
+            //   borderWidth: 2,
+            //   tension: 0,
+            // },
             {
               type: "bar",
               data: props.competitors.map((item) => item.amount),
@@ -134,38 +132,38 @@ const BarChart = ({ props }: Props) => {
                 item === "GME"
                   ? "rgba(255, 0, 0)"
                   : item === "hanpass"
-                  ? "rgba(54, 162, 235, 1)"
+                  ? "rgba(54, 162, 235, 0.7)"
                   : item === "gmoney"
-                  ? "rgba(255, 206, 86, 1)"
+                  ? "rgba(255, 206, 86, 0.7)"
                   : item === "Coinshot"
-                  ? "rgba(75, 192, 192, 1)"
+                  ? "rgba(75, 192, 192, 0.7)"
                   : item === "JRF"
-                  ? "rgba(123,104,238)"
+                  ? "rgba(123, 104, 238, 0.7)"
                   : item === "E9Pay"
-                  ? "rgba(255,165,0)"
+                  ? "rgba(255, 165, 0, 0.7)"
                   : item === "Moin"
-                  ? "rgba(255,105,180)"
+                  ? "rgba(255, 105, 180, 0.7)"
                   : item === "Cross"
-                  ? "rgba(165,42,42)"
+                  ? "rgba(165, 42, 42, 0.7)"
                   : "black"
               ),
               borderColor: company?.map((item: string) =>
                 item === "GME"
                   ? "rgba(255, 0, 0)"
                   : item === "hanpass"
-                  ? "rgba(54, 162, 235, 1)"
+                  ? "rgba(54, 162, 235, 0.7)"
                   : item === "gmoney"
-                  ? "rgba(255, 206, 86, 1)"
+                  ? "rgba(255, 206, 86, 0.7)"
                   : item === "Coinshot"
-                  ? "rgba(75, 192, 192, 1)"
+                  ? "rgba(75, 192, 192, 0.7)"
                   : item === "JRF"
-                  ? "rgba(123,104,238)"
+                  ? "rgba(123, 104, 238, 0.7)"
                   : item === "E9Pay"
-                  ? "rgba(255,165,0)"
+                  ? "rgba(255, 165, 0, 0.7)"
                   : item === "Moin"
-                  ? "rgba(255,105,180)"
+                  ? "rgba(255, 105, 180, 0.7)"
                   : item === "Cross"
-                  ? "rgba(165,42,42)"
+                  ? "rgba(165, 42, 42, 0.7)"
                   : "black"
               ),
               borderRadius: 5,
