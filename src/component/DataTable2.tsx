@@ -61,26 +61,26 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
       >
         <thead
           style={{
-            borderRadius: "10px",
             width: "600px",
             borderSpacing: "0px",
-            border: "3px solid white",
+            border: "3px solid red",
+            borderTopLeftRadius: "10px",
           }}
         >
           <tr
             style={{
-              border: "3px solid white",
+              border: "3px solid red",
               backgroundColor: "red",
               color: "white",
-              borderRadius: "10px",
+              borderTopLeftRadius: "10px",
             }}
           >
             <th
               style={{
                 padding: 20,
                 fontSize: 20,
-                border: "2px solid white",
-                borderRadius: "10px",
+                border: "2px solid red",
+                borderTopLeftRadius: "10px",
               }}
             >
               <FormattedMessage id="national" />
@@ -89,8 +89,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
               style={{
                 padding: 5,
                 fontSize: 20,
-                border: "2px solid white",
-                borderRadius: "10px",
+                border: "2px solid red",
               }}
             >
               <FormattedMessage id="currency_unit" />
@@ -99,8 +98,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
               style={{
                 padding: 20,
                 fontSize: 20,
-                border: "2px solid white",
-                borderRadius: "10px",
+                border: "2px solid red",
               }}
             >
               <FormattedMessage id="competiter" />
@@ -109,8 +107,8 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
               style={{
                 padding: 20,
                 fontSize: 20,
-                border: "2px solid white",
-                borderRadius: "10px",
+                border: "2px solid red",
+                borderTopRightRadius: 10,
               }}
             >
               <FormattedMessage id="amount" />
