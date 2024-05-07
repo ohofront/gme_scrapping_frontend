@@ -123,8 +123,8 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
               key={index}
               style={{
                 border: "3px solid white",
-                backgroundColor: "red",
-                color: "white",
+                backgroundColor: "white",
+                color: "black",
               }}
             >
               {countryRowSpan[index] > 0 && (
@@ -133,7 +133,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
                     minWidth: "10px",
                     height: "50px",
                     textAlign: "center",
-                    border: "2px solid white",
+                    border: "2px solid black",
                     fontSize: 20,
                   }}
                   rowSpan={countryRowSpan[index]}
@@ -148,7 +148,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
                     minWidth: "10px",
                     height: "50px",
                     textAlign: "center",
-                    border: "2px solid white",
+                    border: "2px solid black",
                     fontSize: 20,
                   }}
                   rowSpan={changeunitRowSpan[index]}
@@ -161,7 +161,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
                   minWidth: "10px",
                   height: "50px",
                   textAlign: "center",
-                  border: "2px solid white",
+                  border: "2px solid black",
                   fontSize: 20,
                 }}
               >
@@ -172,7 +172,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
                   minWidth: "10px",
                   height: "50px",
                   textAlign: "center",
-                  border: "2px solid white",
+                  border: "2px solid black",
                   fontSize: 20,
                 }}
               >
