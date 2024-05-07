@@ -78,7 +78,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
             <th
               style={{
                 padding: 20,
-                fontSize: 25,
+                fontSize: 20,
                 border: "2px solid white",
                 borderRadius: "10px",
               }}
@@ -98,7 +98,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
             <th
               style={{
                 padding: 20,
-                fontSize: 25,
+                fontSize: 20,
                 border: "2px solid white",
                 borderRadius: "10px",
               }}
@@ -108,7 +108,7 @@ const DataTable2 = ({ items, headers }: DataTableTypes) => {
             <th
               style={{
                 padding: 20,
-                fontSize: 25,
+                fontSize: 20,
                 border: "2px solid white",
                 borderRadius: "10px",
               }}
