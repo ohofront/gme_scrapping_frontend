@@ -18,7 +18,7 @@ export const defaultListViewDummy: View =
         },
         {
             id: 3,
-            company: 'E9pay',
+            company: 'E9Pay',
             amount: 157800900,
         },
         {
