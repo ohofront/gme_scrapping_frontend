@@ -10,33 +10,32 @@ const BarChart = ({ props }: Props) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [list, setList] = useState<View>(defaultListViewDummy);
   const [company, setCompany] = useState<string[]>([]);
-  // const [dataset, setDataset] = useState<Dataset>();
 
   let chartInstance: any = null;
   let ctx: any = null;
 
   useEffect(() => {
     setList(props);
-  }, [props]);
+  }, []);
 
   useEffect(() => {
-    setCompany(props?.competitors.map((item) => item.company));
-  }, [props]);
+    setCompany(list?.competitors.map((item) => item.company));
+  }, [list]);
 
   // 최대,최소값을 구하는
   const min = useMemo(() => {
     return Math.min.apply(
       null,
-      props.competitors.map((item) => item.amount)
+      list.competitors.map((item) => item.amount)
     );
-  }, [props]);
+  }, [list]);
 
   const max = useMemo(() => {
     return Math.max.apply(
       null,
-      props.competitors.map((item) => item.amount)
+      list.competitors.map((item) => item.amount)
     );
-  }, [props]);
+  }, [list]);
 
   const getStepSize = (min: number, max: number) => {
     const range = max - min; // 최댓값과 최솟값 간의 범위를 계산
@@ -46,88 +45,20 @@ const BarChart = ({ props }: Props) => {
     return Math.ceil(interval / factor) * factor;
   };
 
-  // useEffect(() => {
-  //   setDataset({
-  //     label: list.country,
-  //     data: list.competitors.map(item => item.amount),
-  //     backgroundColor: [
-  //       "rgba(255, 99, 132, 0.2)",
-  //       "rgba(54, 162, 235, 0.2)",
-  //       "rgba(255, 206, 86, 0.2)",
-  //       "rgba(75, 192, 192, 0.2)",
-  //       "rgba(153, 102, 255, 0.2)",
-  //       "rgba(255, 159, 64, 0.2)",
-  //     ],
-  //     borderColor: [
-  //       "rgba(255, 99, 132, 1)",
-  //       "rgba(54, 162, 235, 1)",
-  //       "rgba(255, 206, 86, 1)",
-  //       "rgba(75, 192, 192, 1)",
-  //       "rgba(153, 102, 255, 1)",
-  //       "rgba(255, 159, 64, 1)",
-  //     ],
-  //     borderWidth: 10,
-  //   });
-  // },[list]);
   useEffect(() => {
     if (chartRef.current != null) {
       ctx = chartRef.current.getContext("2d");
     }
-
     const createChart = () => {
       Chart.register(...registerables);
       chartInstance = new Chart(ctx, {
         type: "bar",
         data: {
-          labels: props.competitors.map((item) => item.company),
+          labels: list.competitors.map((item) => item.company),
           datasets: [
-            // {
-            //   type: "line",
-            //   data: props.competitors.map((item: Competitor) => item.amount),
-            //   backgroundColor: company?.map((item: string) =>
-            //     item === "GME"
-            //       ? "rgba(255, 0, 0)"
-            //       : item === "hanpass"
-            //       ? "rgba(54, 162, 235, 1)"
-            //       : item === "gmoney"
-            //       ? "rgba(255, 206, 86, 1)"
-            //       : item === "Coinshot"
-            //       ? "rgba(75, 192, 192, 1)"
-            //       : item === "JRF"
-            //       ? "rgba(123,104,238)"
-            //       : item === "E9Pay"
-            //       ? "rgba(255,165,0)"
-            //       : item === "Moin"
-            //       ? "rgba(255,105,180)"
-            //       : item === "Cross"
-            //       ? "rgba(165,42,42)"
-            //       : ""
-            //   ),
-            //   borderColor: company?.map((item: string) =>
-            //     item === "GME"
-            //       ? "rgba(255, 0, 0)"
-            //       : item === "hanpass"
-            //       ? "rgba(54, 162, 235, 1)"
-            //       : item === "gmoney"
-            //       ? "rgba(255, 206, 86, 1)"
-            //       : item === "Coinshot"
-            //       ? "rgba(75, 192, 192, 1)"
-            //       : item === "JRF"
-            //       ? "rgba(123,104,238)"
-            //       : item === "E9Pay"
-            //       ? "rgba(255,165,0)"
-            //       : item === "Moin"
-            //       ? "rgba(255,105,180)"
-            //       : item === "Cross"
-            //       ? "rgba(165,42,42)"
-            //       : ""
-            //   ),
-            //   borderWidth: 2,
-            //   tension: 0,
-            // },
             {
               type: "bar",
-              data: props.competitors.map((item) => item.amount),
+              data: list.competitors.map((item) => item.amount),
               backgroundColor: company?.map((item: string) =>
                 item === "GME"
                   ? "rgba(255, 0, 0)"
@@ -229,7 +160,7 @@ const BarChart = ({ props }: Props) => {
     return () => {
       destroyChart(); // 컴포넌트가 unmount될 때 차트 파괴
     };
-  }, [props, company]);
+  }, [list, company]);
 
   return (
     <canvas

@@ -18,9 +18,7 @@ import Timer from "../../component/Timer";
 import Dropdown from "../../component/Dropdown";
 import { countries } from "../../enum/country";
 import { remitMethods } from "../../enum/remitmethod";
-import Button from "../../component/Button";
 import { getLiveView } from "../../api/LiveView";
-import Modal from "../../component/Modal";
 import { LiveScrappingData } from "../../dummy/RowData";
 import DataTable from "../../component/DataTable";
 
@@ -40,7 +38,6 @@ const LiveView = () => {
   const [chart, setChart] = useState<View[]>([]);
   const [table, setTable] = useState<Table[]>([]);
 
-  const [startDate, setStartDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>("BDP01");
   const [country, setCountry] = useState<string>("");
 
@@ -48,18 +45,17 @@ const LiveView = () => {
 
   const START_SECOND = 60;
   const [count, setCount] = useState(60);
-  const [isSearchModal, setIsSearchModal] = useState(false);
 
   useEffect(() => {
     setParam({
-      startDttm: startDate,
+      startDttm: new Date(),
       remitMethodCode: method,
       country: country,
       format: "json",
       isHistory: "N",
       period: "",
     });
-  }, [startDate, method, country]);
+  }, [method, country]);
 
   useEffect(() => {
     const chartValues = live.reduce((acc: any, cur: any) => {
@@ -110,40 +106,19 @@ const LiveView = () => {
     setTable(tableValues);
   }, [live]);
 
-  // const fetch = async () => {
-  //   setLoading(true);
-  //   setIsSearchModal(false);
-  //   try {
-  //     const response = await axios.get(
-  //       `${apiUrl}/GME/gme_scrap/pivot/history`,
-  //       { params: param }
-  //     );
-  //     console.log("response: ", response.data);
-  //     setLive(response.data);
-  //     setLoading(false);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   const fetch = async () => {
     setLoading(true);
-    setIsSearchModal(false);
     try {
       await getLiveView(param)
         .then((response: any) => setLive(response.data))
         .catch((error) => {
-          console.log("error$$$", error);
+          console.log("error", error);
           setLive(LiveScrappingData);
         });
       setLoading(false);
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const handleSearch = () => {
-    setIsSearchModal(true);
   };
 
   useEffect(() => {
@@ -169,6 +144,7 @@ const LiveView = () => {
       fetch();
     }
   }, [param]);
+
   return (
     <MainWrapper>
       <SearchBox>
@@ -239,20 +215,6 @@ const LiveView = () => {
           </div>
         )}
       </ContentWrapper>
-      {isSearchModal && (
-        <Modal
-          visible={isSearchModal}
-          title="스크래핑 조회"
-          confirmText="조회"
-          onConfirm={fetch}
-          onClose={() => setIsSearchModal(false)}
-          height={500}
-        >
-          이렇게 조회하시겠습니까?
-          <ChooseSearch>{country === "" ? "전체" : country}</ChooseSearch>
-          <ChooseSearch>{method}</ChooseSearch>
-        </Modal>
-      )}
     </MainWrapper>
   );
 };
