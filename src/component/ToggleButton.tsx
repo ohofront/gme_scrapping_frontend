@@ -1,113 +1,143 @@
-import { set } from "date-fns";
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
-type ToggleType = {
-  latestSort: boolean;
-};
-
+import eng from "../assets/images/Lang/eng.png";
+import ko from "../assets/images/Lang/ko.png";
+import { useEffect, useState } from "react";
 const ToggleButton = () => {
-  const [latestSort, setLatestSort] = useState(true);
+  let langArr = [
+    {
+      id: 1,
+      name: "English",
+      locale: "eng",
+      src: eng,
+    },
+    {
+      id: 2,
+      name: "KOREAN",
+      locale: "ko",
+      src: ko,
+    },
+  ];
   const [locale, setLocale] = useState(localStorage.getItem("locale") ?? "ko");
-  useEffect(() => {
-    console.log("latestSort:", latestSort);
-  }, [latestSort]);
-  const toggleHandler = () => {
-    setLatestSort((prev) => !prev);
-    if (latestSort === true) {
-      setLocale("ko");
-    } else {
-      setLocale("eng");
-    }
+  const [dropDown, setDropDown] = useState({
+    hover: false,
+    src: langArr.filter((item) => item.locale === locale)[0].src,
+    value: langArr.filter((item) => item.locale === locale)[0].name,
+  });
+  const handleItemClick = (item: any) => {
+    setDropDown({
+      value: item.name,
+      hover: false,
+      src: item.src,
+    });
+    setLocale(item.locale);
+    window.location.reload();
   };
   useEffect(() => {
-    console.log("locale:", locale);
+    console.log("locale1:", locale);
     localStorage.setItem("locale", locale);
   }, [locale]);
-  return (
-    <BtnWrapper>
-      <CheckBox type="checkbox" id="toggleBtn" onChange={toggleHandler} />
-      <ButtonLabel htmlFor="toggleBtn" latestSort={latestSort} />
-    </BtnWrapper>
-  );
+  const LangSelect = () => {
+    return (
+      <MenuItem>
+        <LangSelectA>
+          <LangSelectSpan>
+            <img className="flag_image" src={dropDown.src} alt="" />
+            <span className="lang_name"> {dropDown.value}</span>
+          </LangSelectSpan>
+        </LangSelectA>
+        <ul className="lang_menu">
+          {langArr.map((item) => {
+            return (
+              <li
+                className="item"
+                key={item.id}
+                onClick={() => handleItemClick(item)}
+              >
+                <div className="businee_solutions_a">
+                  <img className="flag_image" src={item.src} alt="" />
+                  <span className="lang_name" defaultValue={item.locale}>
+                    {item.name}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </MenuItem>
+    );
+  };
+  return <LangSelectWrapper>{LangSelect()}</LangSelectWrapper>;
 };
-
 export default ToggleButton;
-
-const BtnWrapper = styled.div`
-  display: flex;
+const LangSelectWrapper = styled.div`
   padding-left: 100px;
-  z-index: 0;
 `;
-
-const CheckBox = styled.input`
+const LangMenu = styled.ul`
   display: none;
 `;
 
-const ButtonLabel = styled.label<ToggleType>`
-  z-index: 10;
-  /* 만들고자 하는 button 의 크기와 색상 */
-  width: 12rem;
-  height: 3rem;
-  border-radius: 2em;
-  background-color: white;
+const MenuItem = styled.li`
   display: flex;
-
-  /* state가 false일 때의 before */
-  &::before {
+  align-items: center;
+  float: left;
+  list-style: none;
+  outline: 0 none;
+  line-height: 0;
+  font-weight: bold;
+  font-size: 20px;
+  position: relative;
+  .lang_menu {
+    display: none;
+  }
+  &:hover .lang_menu {
+    border-radius: 20px;
+    flex-direction: column;
+    padding: 0;
     display: flex;
+    background-color: rgba(255, 255, 255, 100) !important;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    width: 200%;
+    height: 100px;
+    left: 0;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08);
     position: absolute;
-    content: "KOR";
-    padding-left: 1em;
+    top: 140%;
+    list-style: none outside none;
+    margin: 0;
+    z-index: 1000;
+    color: #191c1f;
+  }
+  .item {
     cursor: pointer;
-    /* 좌측에 text가 오게하기 위함 */
-    justify-content: flex-start;
-    align-items: center;
-    /* before 요소가 이동할 경로의 길이만큼 width 지정 */
-    width: 9rem;
-    height: 3rem;
-    color: rgb(220, 220, 220);
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 20px;
-    transition: all 0.2s ease-in-out;
-  }
-  /* state가 false일 때의 after */
-  &::after {
-    display: flex;
-    position: relative;
-    content: "ENG";
-    width: 6rem;
-    height: 3rem;
-    justify-content: center;
-    align-items: center;
-    /* false일 때는 우측에 있어야하므로 전체 길이의 반만큼 이동한 상태 */
-    left: 6rem;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 20px;
-    border-radius: 2rem;
-    background: black;
-    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.16);
-    transition: all 0.2s ease-in-out;
-  }
-
-  /* state가 true일 때 */
-  ${(props) =>
-    props.latestSort &&
-    `
-    &::before {
-      padding-right: 1rem;
-      content: 'ENG';
-       /* 우측에 text가 오도록 하기 위함 */
-      justify-content: flex-end;
-    };
-    &::after {
-      content: 'KOR';
-      width: 6rem;
-      height: 3rem;
-       /* true일 때는 좌측에 있어야함 */
-      left: 0rem;
+    padding: 20px;
+    transition: background 0.1s linear;
+    list-style: none outside none;
+    .lang_name {
+      padding-left: 5px;
     }
-  `}
+    &:hover {
+      background-color: red;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+`;
+const LangSelectA = styled.a`
+  cursor: pointer;
+`;
+const LangSelectSpan = styled.span`
+  position: relative;
+  list-style: none outside none;
+  text-align: left;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+  text-transform: none !important;
+  &:hover {
+    color: black;
+  }
 `;
