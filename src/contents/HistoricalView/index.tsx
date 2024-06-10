@@ -15,6 +15,7 @@ import LineChart from "../../component/LineChart";
 import FeedTab from "../../component/FeedTab";
 import { HistoryScrappingData } from "../../dummy/RowData";
 import { FormattedMessage } from "react-intl";
+import { remitMethods } from "../../enum/remitmethod";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -34,7 +35,6 @@ const HistoricalView = () => {
     defaultHistoricalViewArrayDummy
   );
 
-  const [startDate, setStartDate] = useState(new Date());
   const [method, setMethod] = useState<RemitMethodCode>("BDP01");
   const [country, setCountry] = useState<string>("Nepal");
   const [period, setPeriod] = useState<string>("D");
@@ -44,22 +44,20 @@ const HistoricalView = () => {
 
   useEffect(() => {
     setParam({
-      startDttm: startDate,
+      startDttm: new Date(),
       remitMethodCode: method,
       country: country,
       format: "json",
       isHistory: "Y",
       period: period,
     });
-  }, [period, startDate, method, country]);
+  }, [period, method, country]);
 
   const fetch = async () => {
     setLoading(true);
     try {
       await getHistoricalView(param)
         .then((response: any) => {
-          console.log("Historical response data:::", response.data);
-
           setHistory(response.data);
         })
         .catch((error) => {
@@ -128,6 +126,12 @@ const HistoricalView = () => {
             currentOption={country}
             setCurrentOption={setCountry}
           />
+          <Dropdown
+            defaultTitle={<FormattedMessage id="remit_code" />}
+            optionData={remitMethods}
+            currentOption={method}
+            setCurrentOption={setMethod}
+          />
           <DateTimeWrapper>
             <FeedTab period={period} setPeriod={setPeriod} />
           </DateTimeWrapper>
@@ -167,7 +171,7 @@ const SearchBox = styled.div`
   justify-content: center;
   .top {
     display: grid;
-    grid-template-columns: 0.3fr 0.3fr;
+    grid-template-columns: 0.2fr 0.2fr 0.3fr;
     width: 100%;
     align-items: center;
     justify-content: center;
