@@ -1,128 +1,160 @@
-import { useState } from "react";
+import React, { Fragment } from "react";
+import { FormattedMessage } from "react-intl";
 
 export type DataTableTypes = {
-  headers: any;
   items: any;
-  selectable: boolean;
-  itemKey?: any;
-  updateSelection?: any;
+  headers: any;
 };
-export const DataTable = ({
-  headers,
-  items,
-  selectable,
-  itemKey,
-  updateSelection = () => {},
-}: DataTableTypes) => {
-  // headers가 있는지 체크하고, 없다면 에러를 던짐
-  if (!headers || !headers.length) {
-    throw new Error("<DataTable /> headers is required.");
-  }
-  // value 순서에 맞게 테이블 데이터를 출력하기 위한 배열
-  const headerKey = headers.map((header: any) => header.value);
-  // itemKey가 없다면 headers의 첫번째 요소를 선택
-  if (!itemKey) {
-    itemKey = headerKey[0];
-  }
-  // 선택한 row의 itemKey를 담은 배열
-  const [selection, setSelection] = useState(new Set());
-  const onChangeSelect = (value: any) => {
-    // 기존의 selection으로 새로운 Set 생성
-    const newSelection = new Set(selection);
-    if (newSelection.has(value)) {
-      // value가 있으면 삭제 (checked가 false이기 때문)
-      newSelection.delete(value);
+
+const DataTable = ({ items, headers }: DataTableTypes) => {
+  let namesArr: any = {};
+  const countryRowSpan = items.reduce((result: any, item: any, key: any) => {
+    if (namesArr[item.country] === undefined) {
+      namesArr[item.country] = key;
+      result[key] = 1;
     } else {
-      // value가 없으면 추가 (checked가 true이기 때문)
-      newSelection.add(value);
+      const firstIndex = namesArr[item.country];
+      if (
+        firstIndex === key - 1 ||
+        (item.country === items[key - 1].country && result[key - 1] === 0)
+      ) {
+        result[firstIndex]++;
+        result[key] = 0;
+      } else {
+        result[key] = 1;
+        namesArr[item.country] = key;
+      }
     }
-    // 새로운 Set으로 state 변경
-    setSelection(newSelection);
-    updateSelection([...newSelection]);
-  };
-  // disabled가 true인 item만 반환하는 함수
-  const getAbledItems = (items: any) => {
-    return items.filter(({ disabled }: any) => !disabled);
-  };
-  const onChangeSelectAll = (e: any) => {
-    if (e.target.checked) {
-      // checked가 true인 경우 전체 선택
-      const allCheckedSelection = new Set(
-        // 활성화된 행의 배열을 순회하며 itemKey로 요소에 접근해 데이터를 저장
-        getAbledItems(items).map((item: any) => item[itemKey])
-      );
-      setSelection(allCheckedSelection);
-      updateSelection([...allCheckedSelection]);
+    return result;
+  }, []);
+
+  const changeunitRowSpan = items.reduce((result: any, item: any, key: any) => {
+    if (namesArr[item.changeunit] === undefined) {
+      namesArr[item.changeunit] = key;
+      result[key] = 1;
     } else {
-      // checked가 false인 경우 전체 선택 해제
-      setSelection(new Set());
-      updateSelection([]);
+      const firstIndex = namesArr[item.changeunit];
+      if (
+        firstIndex === key - 1 ||
+        (item.changeunit === items[key - 1].changeunit && result[key - 1] === 0)
+      ) {
+        result[firstIndex]++;
+        result[key] = 0;
+      } else {
+        result[key] = 1;
+        namesArr[item.changeunit] = key;
+      }
     }
-  };
-  // 전체 선택 상태 여부
-  const isSelectedAll = () => {
-    return selection.size === getAbledItems(items).length;
-  };
+    return result;
+  }, []);
+
   return (
-    <table
-      style={{
-        backgroundColor: "white",
-        borderRadius: "10px",
-        width: "600px",
-        borderSpacing: "0px",
-        border: "3px solid black",
-      }}
-    >
-      <thead>
-        <tr style={{ border: "3px solid black" }}>
-          {/* 선택 기능을 사용할 때만 바인딩 */}
-          {selectable && (
-            <th>
-              <input
-                type="checkbox"
-                checked={isSelectedAll()}
-                onChange={onChangeSelectAll}
-              />
-            </th>
-          )}
-          {headers.map((header: any) => (
+    <div>
+      <table
+        style={{
+          backgroundColor: "white",
+          borderRadius: "10px",
+          width: "600px",
+          borderSpacing: "0px",
+          border: "3px solid white",
+        }}
+      >
+        <thead
+          style={{
+            width: "600px",
+            borderSpacing: "0px",
+            border: "3px solid red",
+            borderTopLeftRadius: "10px",
+          }}
+        >
+          <tr
+            style={{
+              border: "3px solid red",
+              backgroundColor: "red",
+              color: "white",
+              borderTopLeftRadius: "10px",
+            }}
+          >
             <th
               style={{
                 padding: 20,
-                fontSize: 25,
-                border: "2px solid black",
+                fontSize: 20,
+                border: "2px solid red",
+                borderTopLeftRadius: "10px",
               }}
-              key={header.text}
             >
-              {header.text} {/* 컬럼명 바인딩 */}
+              <FormattedMessage id="national" />
             </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {items.map((item: any, index: number) => (
-          <tr
-            key={index}
-            className={`
-            ${selection.has(item[itemKey]) ? "select_row" : ""} 
-            ${item.disabled ? "disabled_row" : ""}
-          `}
-          >
-            {/* 선택 기능을 사용할 때만 바인딩 */}
-            {selectable && (
-              <td style={{ minWidth: "100px", padding: 50 }}>
-                <input
-                  type="checkbox"
-                  disabled={item.disabled}
-                  checked={selection.has(item[itemKey])}
-                  onChange={() => onChangeSelect(item[itemKey])}
-                />
-              </td>
-            )}
-            {/* headerKey를 순회하면서 key를 가져옴 */}
-            {headerKey.map((key: string) => (
+            <th
+              style={{
+                padding: 5,
+                fontSize: 20,
+                border: "2px solid red",
+              }}
+            >
+              <FormattedMessage id="currency_unit" />
+            </th>
+            <th
+              style={{
+                padding: 20,
+                fontSize: 20,
+                border: "2px solid red",
+              }}
+            >
+              <FormattedMessage id="competiter" />
+            </th>
+            <th
+              style={{
+                padding: 20,
+                fontSize: 20,
+                border: "2px solid red",
+                borderTopRightRadius: 10,
+              }}
+            >
+              <FormattedMessage id="amount" />
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((el: any, index: number) => (
+            <tr
+              key={index}
+              style={{
+                border: "3px solid white",
+                backgroundColor: "white",
+                color: "black",
+              }}
+            >
+              {countryRowSpan[index] > 0 && (
+                <td
+                  style={{
+                    minWidth: "10px",
+                    height: "50px",
+                    textAlign: "center",
+                    border: "2px solid black",
+                    fontSize: 20,
+                  }}
+                  rowSpan={countryRowSpan[index]}
+                >
+                  {el.country}
+                </td>
+              )}
+
+              {changeunitRowSpan[index] > 0 && (
+                <td
+                  style={{
+                    minWidth: "10px",
+                    height: "50px",
+                    textAlign: "center",
+                    border: "2px solid black",
+                    fontSize: 20,
+                  }}
+                  rowSpan={changeunitRowSpan[index]}
+                >
+                  {el.changeunit}
+                </td>
+              )}
               <td
-                key={key + index}
                 style={{
                   minWidth: "10px",
                   height: "50px",
@@ -131,12 +163,25 @@ export const DataTable = ({
                   fontSize: 20,
                 }}
               >
-                {item[key]} {/* key로 객체의 값을 출력 */}
+                {el.company}
               </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+              <td
+                style={{
+                  minWidth: "10px",
+                  height: "50px",
+                  textAlign: "center",
+                  border: "2px solid black",
+                  fontSize: 20,
+                }}
+              >
+                {el.amount}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
+
+export default DataTable;

@@ -6,7 +6,6 @@ import {
 } from "../../models/api/apiModel";
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
-import { DataTable } from "../../component/DataTable";
 import { View } from "../../models/view/viewModel";
 import { headers } from "../../dummy/DataTable";
 import BarChart from "../../component/BarChart";
@@ -23,7 +22,7 @@ import Button from "../../component/Button";
 import { getLiveView } from "../../api/LiveView";
 import Modal from "../../component/Modal";
 import { LiveScrappingData } from "../../dummy/RowData";
-import DataTable2 from "../../component/DataTable2";
+import DataTable from "../../component/DataTable";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -186,23 +185,6 @@ const LiveView = () => {
             currentOption={method}
             setCurrentOption={setMethod}
           />
-          {/* <DateInput
-            defaultTitle="조회 시간"
-            searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
-          /> */}
-          {/* <Button
-            outline={false}
-            color="red"
-            font="black"
-            fontSize={20}
-            height="50px"
-            width="200px"
-            borderRadius="12px"
-            onClick={handleSearch}
-            disabled={false}
-          >
-            조회
-          </Button> */}
         </div>
         <div className="down">
           <DateTimeWrapper>
@@ -222,8 +204,7 @@ const LiveView = () => {
         ) : live.length > 0 ? (
           <>
             <TableWrapper>
-              {/* <DataTable headers={headers} items={table} selectable={false} /> */}
-              <DataTable2 items={table} headers={headers} />
+              <DataTable items={table} headers={headers} />
             </TableWrapper>
             <ChartWrapper>
               {chart.map((item: View, index: number) => {
