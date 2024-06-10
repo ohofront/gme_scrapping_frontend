@@ -1,4 +1,3 @@
-import React, { Fragment } from "react";
 import { FormattedMessage } from "react-intl";
 
 export type DataTableTypes = {
