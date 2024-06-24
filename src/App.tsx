@@ -1,9 +1,9 @@
 import React from "react";
 import { Tab } from "./models/common/tabModel";
-import TabMenu from "./component/TabMenu";
+import TabMenu from "./components/TabMenu";
 import LiveView from "./contents/LiveView";
 import HistoricalView from "./contents/HistoricalView";
-import ScrollTop from "./component/TopButton";
+import ScrollTop from "./components/TopButton";
 import { FormattedMessage } from "react-intl";
 
 function App() {

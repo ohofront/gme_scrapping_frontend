@@ -8,19 +8,19 @@ import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { View } from "../../models/view/viewModel";
 import { headers } from "../../dummy/DataTable";
-import BarChart from "../../component/BarChart";
-import Loading from "../../component/Loading";
+import BarChart from "../../components/BarChart";
+import Loading from "../../components/Loading";
 import { Table } from "../../models/table/tableModel";
 import { currencyFormatter } from "../../function/currencyFormatter";
-import DateInput from "../../component/DateInput";
+import DateInput from "../../components/DateInput";
 import moment from "moment";
-import Timer from "../../component/Timer";
-import Dropdown from "../../component/Dropdown";
+import Timer from "../../components/Timer";
+import Dropdown from "../../components/Dropdown";
 import { countries } from "../../enum/country";
 import { remitMethods } from "../../enum/remitmethod";
 import { getLiveView } from "../../api/LiveView";
 import { LiveScrappingData } from "../../dummy/RowData";
-import DataTable from "../../component/DataTable";
+import DataTable from "../../components/DataTable";
 
 export const InitialParams: Params = {
   startDttm: new Date(),

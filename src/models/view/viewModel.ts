@@ -1,7 +1,11 @@
-export interface Competitor {
+export interface Info {
   id: number;
-  company: string;
+  company: string
   amount: number;
+}
+export interface Competitor {
+  changeunit: string;
+  info: Info[];
 }
 
 export interface View {

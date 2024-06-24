@@ -7,12 +7,12 @@ import {
   ResponseParams,
 } from "../../models/api/apiModel";
 import { HistoricalViewModel } from "../../models/view/viewModel";
-import Loading from "../../component/Loading";
-import Dropdown from "../../component/Dropdown";
+import Loading from "../../components/Loading";
+import Dropdown from "../../components/Dropdown";
 import { countries } from "../../enum/country";
 import { getHistoricalView } from "../../api/HistoricalView";
-import LineChart from "../../component/LineChart";
-import FeedTab from "../../component/FeedTab";
+import LineChart from "../../components/LineChart";
+import FeedTab from "../../components/FeedTab";
 import { HistoryScrappingData } from "../../dummy/RowData";
 import { FormattedMessage } from "react-intl";
 import { remitMethods } from "../../enum/remitmethod";
