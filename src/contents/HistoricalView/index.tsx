@@ -142,6 +142,11 @@ const HistoricalView = () => {
           <Loading />
         ) : history.length > 0 ? (
           <>
+            <ChartTitle>
+              {chart[0]?.country}
+              {"-"}
+              {chart[0]?.changeunit}
+            </ChartTitle>
             <ChartWrapper>
               <LineChart props={chart} />
             </ChartWrapper>
@@ -193,7 +198,18 @@ const DateTimeWrapper = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   width: 100%;
-  flex-direction: row;
+  flex-direction: column;
+`;
+
+const ChartTitle = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 10px 10px;
 `;
 
 const ChartWrapper = styled.div`
