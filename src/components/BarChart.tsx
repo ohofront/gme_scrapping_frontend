@@ -16,7 +16,7 @@ const BarChart = ({ props }: Props) => {
 
   useEffect(() => {
     setList(props);
-  }, []);
+  }, [props]);
 
   useEffect(() => {
     setCompany(list?.competitors.map((item) => item.company));
