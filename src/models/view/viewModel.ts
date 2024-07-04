@@ -1,22 +1,18 @@
-export interface Info {
+export interface Competitor {
   id: number;
   company: string
   amount: number;
-}
-export interface Competitor {
-  changeunit: string;
-  info: Info[];
 }
 
 export interface View {
   id: number;
   country: string;
+  changeunit: string;
   competitors: Competitor[];
 }
 
 export interface HistoricalViewCompetitor {
   id: number;
-  country: string;
   amount: number;
   date: string;
 }
@@ -24,5 +20,7 @@ export interface HistoricalViewCompetitor {
 export interface HistoricalViewModel {
   id: number;
   company: string;
+  country: string;
+  changeunit: string;
   competitors: HistoricalViewCompetitor[];
 }

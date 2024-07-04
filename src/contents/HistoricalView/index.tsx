@@ -78,9 +78,10 @@ const HistoricalView = () => {
       if (companyIndex === -1) {
         acc.push({
           company: cur.SiteName,
+          country: cur.SentNation,
+          changeunit: cur.SentCurrency,
           competitors: [
             {
-              country: cur.SentNation,
               amount: cur.RecvAmt,
               date: cur.ScrapDTTM,
             },
@@ -88,7 +89,6 @@ const HistoricalView = () => {
         });
       } else {
         acc[companyIndex].competitors.push({
-          country: cur.SentNation,
           amount: cur.RecvAmt,
           date: cur.ScrapDTTM,
         });

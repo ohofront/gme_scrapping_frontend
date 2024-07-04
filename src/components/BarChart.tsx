@@ -138,7 +138,7 @@ const BarChart = ({ props }: Props) => {
                 size: 30,
               },
               display: true,
-              text: props.country,
+              text: props.country + "-" + props.changeunit,
               position: "top",
               color: "1px solid #ddd",
             },

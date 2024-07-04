@@ -53,7 +53,7 @@ const DataTable = ({ items, headers }: DataTableTypes) => {
         style={{
           backgroundColor: "white",
           borderRadius: "10px",
-          width: "600px",
+          width: "500px",
           borderSpacing: "0px",
           border: "3px solid white",
         }}
@@ -76,7 +76,7 @@ const DataTable = ({ items, headers }: DataTableTypes) => {
           >
             <th
               style={{
-                padding: 20,
+                padding: 10,
                 fontSize: 20,
                 border: "2px solid red",
                 borderTopLeftRadius: "10px",
@@ -86,7 +86,7 @@ const DataTable = ({ items, headers }: DataTableTypes) => {
             </th>
             <th
               style={{
-                padding: 5,
+                padding: 10,
                 fontSize: 20,
                 border: "2px solid red",
               }}
@@ -95,7 +95,7 @@ const DataTable = ({ items, headers }: DataTableTypes) => {
             </th>
             <th
               style={{
-                padding: 20,
+                padding: 10,
                 fontSize: 20,
                 border: "2px solid red",
               }}
@@ -104,7 +104,7 @@ const DataTable = ({ items, headers }: DataTableTypes) => {
             </th>
             <th
               style={{
-                padding: 20,
+                padding: 10,
                 fontSize: 20,
                 border: "2px solid red",
                 borderTopRightRadius: 10,

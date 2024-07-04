@@ -60,12 +60,20 @@ const LiveView = () => {
   useEffect(() => {
     const chartValues = live.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
-        (item: any) => item.country === cur.SentNation
+        (item: any) =>
+          item.country === cur.SentNation &&
+          item.changeunit === cur.SentCurrency
       );
       if (countryIndex === -1) {
         acc.push({
           country: cur.SentNation,
-          competitors: [{ company: cur.SiteName, amount: cur.RecvAmt }],
+          changeunit: cur.SentCurrency,
+          competitors: [
+            {
+              company: cur.SiteName,
+              amount: cur.RecvAmt,
+            },
+          ],
         });
       } else {
         acc[countryIndex].competitors.push({
@@ -226,8 +234,8 @@ const MainWrapper = styled.div`
 `;
 const TableWrapper = styled.div`
   width: 50%;
-  height: 200px;
-  padding: 10px 100px;
+  height: 100%;
+  padding-left: 50px;
 `;
 
 const ChartWrapper = styled.div`
@@ -237,12 +245,12 @@ const ChartWrapper = styled.div`
   background-color: #fff;
   float: right;
   display: grid;
-  grid-template-columns: 500px 500px;
-  grid-gap: 50px;
+  grid-template-columns: 400px 400px 400px;
+  grid-gap: 30px;
+  padding-right: 50px;
 `;
 
 const Content = styled.div`
-  padding: 10px 10px;
   border-radius: 10px;
   color: #fff;
   display: flex;

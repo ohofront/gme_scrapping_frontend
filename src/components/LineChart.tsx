@@ -2,10 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { HistoricalViewModel, View } from "../models/view/viewModel";
 import { Chart, registerables } from "chart.js";
 import { Dataset } from "../models/chart/chartModel";
-import {
-  defaultHistoricalViewArrayDummy,
-  defaultHistoricalViewDummy,
-} from "../dummy/HistoricalView";
+import { defaultHistoricalViewDummy } from "../dummy/HistoricalView";
 
 interface Props {
   props: HistoricalViewModel[];
@@ -153,7 +150,7 @@ const LineChart = ({ props }: Props) => {
   return (
     <canvas
       ref={chartRef}
-      style={{ width: "300px", height: "800px", padding: "50px 100px" }}
+      style={{ width: "300px", height: "800px", padding: "20px 100px" }}
     />
   );
 };
