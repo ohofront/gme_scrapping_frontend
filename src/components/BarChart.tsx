@@ -1,173 +1,237 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
-import { defaultListViewDummy } from "../dummy/LiveView";
-import { Competitor, View } from "../models/view/viewModel";
+import { View } from "../models/view/viewModel";
+import styled from "styled-components";
+import { currencyFormatter } from "../function/currencyFormatter";
+
+Chart.register(...registerables);
 
 interface Props {
   props: View;
 }
+
 const BarChart = ({ props }: Props) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
-  const [list, setList] = useState<View>(defaultListViewDummy);
-  const [company, setCompany] = useState<string[]>([]);
-
-  let chartInstance: any = null;
-  let ctx: any = null;
+  const chartInstanceRef = useRef<Chart | null>(null);
 
   useEffect(() => {
-    setList(props);
-  }, [props]);
-
-  useEffect(() => {
-    setCompany(list?.competitors.map((item) => item.company));
-  }, [list]);
-
-  // 최대,최소값을 구하는
-  const min = useMemo(() => {
-    return Math.min.apply(
-      null,
-      list.competitors.map((item) => item.amount)
-    );
-  }, [list]);
-
-  const max = useMemo(() => {
-    return Math.max.apply(
-      null,
-      list.competitors.map((item) => item.amount)
-    );
-  }, [list]);
-
-  const getStepSize = (min: number, max: number) => {
-    const range = max - min; // 최댓값과 최솟값 간의 범위를 계산
-    const interval = Math.ceil(range / 3); // 범위를 3등분하여 각 구간의 크기를 계산
-    const exponent = Math.floor(Math.log10(interval)); // 각 구간의 크기에 대한 로그 값을 계산
-    const factor = Math.pow(10, exponent); // 10의 거듭제곱을 통해 가장 가까운 10의 배수로 구간 크기를 정규화
-    return Math.ceil(interval / factor) * factor;
-  };
-
-  useEffect(() => {
-    if (chartRef.current != null) {
-      ctx = chartRef.current.getContext("2d");
+    if (!chartRef.current || !props.competitors || props.competitors.length === 0) {
+      return;
     }
-    const createChart = () => {
-      Chart.register(...registerables);
-      chartInstance = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: list.competitors.map((item) => item.company),
-          datasets: [
-            {
-              type: "bar",
-              data: list.competitors.map((item) => item.amount),
-              backgroundColor: company?.map((item: string) =>
-                item === "GME"
-                  ? "rgba(255, 0, 0)"
-                  : item === "hanpass"
-                  ? "rgba(54, 162, 235, 0.7)"
-                  : item === "gmoney"
-                  ? "rgba(255, 206, 86, 0.7)"
-                  : item === "Coinshot"
-                  ? "rgba(75, 192, 192, 0.7)"
-                  : item === "JRF"
-                  ? "rgba(123, 104, 238, 0.7)"
-                  : item === "E9Pay"
-                  ? "rgba(255, 165, 0, 0.7)"
-                  : item === "Moin"
-                  ? "rgba(255, 105, 180, 0.7)"
-                  : item === "Cross"
-                  ? "rgba(165, 42, 42, 0.7)"
-                  : "black"
-              ),
-              borderColor: company?.map((item: string) =>
-                item === "GME"
-                  ? "rgba(255, 0, 0)"
-                  : item === "hanpass"
-                  ? "rgba(54, 162, 235, 0.7)"
-                  : item === "gmoney"
-                  ? "rgba(255, 206, 86, 0.7)"
-                  : item === "Coinshot"
-                  ? "rgba(75, 192, 192, 0.7)"
-                  : item === "JRF"
-                  ? "rgba(123, 104, 238, 0.7)"
-                  : item === "E9Pay"
-                  ? "rgba(255, 165, 0, 0.7)"
-                  : item === "Moin"
-                  ? "rgba(255, 105, 180, 0.7)"
-                  : item === "Cross"
-                  ? "rgba(165, 42, 42, 0.7)"
-                  : "black"
-              ),
-              borderRadius: 5,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          color: "black",
-          scales: {
-            y: {
-              beginAtZero: false,
-              ticks: {
-                stepSize: getStepSize(min, max),
-              },
-            },
-            x: {
-              ticks: {
-                color: "black",
-                font: {
-                  size: 11,
-                  weight: "bold",
-                },
+
+    const ctx = chartRef.current.getContext("2d");
+    if (!ctx) return;
+
+    // Destroy prior chart instance safely
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+      chartInstanceRef.current = null;
+    }
+
+    // Sort competitors by amount descending for clean visual hierarchy
+    const sortedCompetitors = [...props.competitors].sort(
+      (a, b) => b.amount - a.amount
+    );
+
+    const labels = sortedCompetitors.map((item) => item.company);
+    const data = sortedCompetitors.map((item) => item.amount);
+
+    const bgColors = labels.map((name) => {
+      const upper = name.toUpperCase();
+      if (upper === "GME") return "rgba(220, 38, 38, 0.9)";
+      if (upper === "HANPASS") return "rgba(59, 130, 246, 0.75)";
+      if (upper === "GMONEY") return "rgba(245, 158, 11, 0.75)";
+      if (upper === "COINSHOT") return "rgba(16, 185, 129, 0.75)";
+      if (upper === "JRF") return "rgba(139, 92, 246, 0.75)";
+      if (upper === "E9PAY") return "rgba(236, 72, 153, 0.75)";
+      if (upper === "MOIN") return "rgba(6, 182, 212, 0.75)";
+      if (upper === "CROSS") return "rgba(249, 115, 22, 0.75)";
+      return "rgba(148, 163, 184, 0.6)";
+    });
+
+    const borderColors = labels.map((name) => {
+      const upper = name.toUpperCase();
+      if (upper === "GME") return "#ef4444";
+      if (upper === "HANPASS") return "#3b82f6";
+      if (upper === "GMONEY") return "#f59e0b";
+      if (upper === "COINSHOT") return "#10b981";
+      if (upper === "JRF") return "#8b5cf6";
+      if (upper === "E9PAY") return "#ec4899";
+      if (upper === "MOIN") return "#06b6d4";
+      if (upper === "CROSS") return "#f97316";
+      return "#94a3b8";
+    });
+
+    const minAmount = Math.min(...data);
+    const maxAmount = Math.max(...data);
+    const padding = Math.max(1000, Math.round((maxAmount - minAmount) * 0.2));
+    const yMin = Math.max(0, minAmount - padding);
+    const yMax = maxAmount + padding;
+
+    chartInstanceRef.current = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "수취 금액",
+            data: data,
+            backgroundColor: bgColors,
+            borderColor: borderColors,
+            borderWidth: 1.5,
+            borderRadius: 6,
+            borderSkipped: false,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            backgroundColor: "rgba(15, 23, 42, 0.95)",
+            titleColor: "#f8fafc",
+            titleFont: { size: 13, weight: "bold" },
+            bodyColor: "#cbd5e1",
+            bodyFont: { size: 12 },
+            padding: 12,
+            borderColor: "rgba(255, 255, 255, 0.1)",
+            borderWidth: 1,
+            displayColors: true,
+            callbacks: {
+              label: (context) => {
+                const val = context.parsed.y ?? 0;
+                return ` 수취액: ${currencyFormatter(val)} ${props.changeunit}`;
               },
             },
           },
-          plugins: {
-            colors: { enabled: true },
-            legend: {
-              position: "top",
+        },
+        scales: {
+          x: {
+            grid: {
               display: false,
-              labels: {
-                color: "black",
-                font: {
-                  size: 10,
-                },
+            },
+            ticks: {
+              color: "#94a3b8",
+              font: {
+                size: 11,
+                weight: "bold",
               },
             },
-            title: {
+          },
+          y: {
+            min: yMin,
+            max: yMax,
+            grid: {
+              color: "rgba(255, 255, 255, 0.05)",
+            },
+            ticks: {
+              color: "#64748b",
               font: {
-                size: 30,
+                size: 10,
+                family: "'JetBrains Mono', monospace",
               },
-              display: true,
-              text: props.country + "-" + props.changeunit,
-              position: "top",
-              color: "1px solid #ddd",
+              callback: (value) => currencyFormatter(Number(value)),
             },
           },
         },
-      });
-    };
-
-    const destroyChart = () => {
-      if (chartInstance) {
-        chartInstance.destroy();
-        chartInstance = null;
-      }
-    };
-
-    destroyChart(); // 기존 차트 파괴
-    createChart(); // 새로운 차트 생성
+      },
+    });
 
     return () => {
-      destroyChart(); // 컴포넌트가 unmount될 때 차트 파괴
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+        chartInstanceRef.current = null;
+      }
     };
-  }, [list, company]);
+  }, [props]);
 
   return (
-    <canvas
-      ref={chartRef}
-      style={{ width: "200px", height: "200px", padding: "0px" }}
-    />
+    <ChartCard>
+      <ChartHeader>
+        <TitleGroup>
+          <CountryFlagBadge>
+            {props.country === "Nepal" ? "🇳🇵" : props.country === "Vietnam" ? "🇻🇳" : props.country === "Philippines" ? "🇵🇭" : "🌐"}
+          </CountryFlagBadge>
+          <div>
+            <ChartHeading>
+              {props.country} <CurrencySubText>({props.changeunit})</CurrencySubText>
+            </ChartHeading>
+            <ChartSubHeading>경쟁사별 수취금액 비교 차트</ChartSubHeading>
+          </div>
+        </TitleGroup>
+      </ChartHeader>
+      <CanvasContainer>
+        <canvas ref={chartRef} />
+      </CanvasContainer>
+    </ChartCard>
   );
 };
 
 export default BarChart;
+
+const ChartCard = styled.div`
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 380px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+`;
+
+const ChartHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+`;
+
+const TitleGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const CountryFlagBadge = styled.span`
+  font-size: 20px;
+`;
+
+const ChartHeading = styled.h4`
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const CurrencySubText = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+`;
+
+const ChartSubHeading = styled.p`
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: #64748b;
+`;
+
+const CanvasContainer = styled.div`
+  flex: 1;
+  width: 100%;
+  position: relative;
+  min-height: 260px;
+`;

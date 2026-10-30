@@ -1,4 +1,4 @@
-import { HistoricalViewModel, View } from "../../models/view/viewModel"
+import { HistoricalViewModel } from "../../models/view/viewModel"
 
 export const defaultHistoricalViewDummy: HistoricalViewModel = 
 {
