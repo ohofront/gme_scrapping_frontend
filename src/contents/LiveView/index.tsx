@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Params,
   RemitMethodCode,
@@ -7,20 +7,20 @@ import {
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { View } from "../../models/view/viewModel";
-import { headers } from "../../dummy/DataTable";
 import BarChart from "../../components/BarChart";
 import Loading from "../../components/Loading";
 import { Table } from "../../models/table/tableModel";
 import { currencyFormatter } from "../../function/currencyFormatter";
 import DateInput from "../../components/DateInput";
 import moment from "moment";
-import Timer from "../../components/Timer";
 import Dropdown from "../../components/Dropdown";
 import { countries } from "../../enum/country";
 import { remitMethods } from "../../enum/remitmethod";
 import { getLiveView } from "../../api/LiveView";
 import { LiveScrappingData } from "../../dummy/RowData";
 import DataTable from "../../components/DataTable";
+import FinancialMetrics from "../../components/FinancialMetrics";
+import { FiGlobe, FiCreditCard, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 
 export const InitialParams: Params = {
   startDttm: new Date(),
@@ -34,6 +34,7 @@ export const InitialParams: Params = {
 const LiveView = () => {
   const [param, setParam] = useState<Params>(InitialParams);
   const [live, setLive] = useState<ResponseParams[]>([]);
+  const [isLiveApiConnected, setIsLiveApiConnected] = useState<boolean | null>(null);
 
   const [chart, setChart] = useState<View[]>([]);
   const [table, setTable] = useState<Table[]>([]);
@@ -42,9 +43,9 @@ const LiveView = () => {
   const [country, setCountry] = useState<string>("");
 
   const [loading, setLoading] = useState(true);
-
   const START_SECOND = 60;
-  const [count, setCount] = useState(60);
+  const [count, setCount] = useState(START_SECOND);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     setParam({
@@ -57,6 +58,7 @@ const LiveView = () => {
     });
   }, [method, country]);
 
+  // Aggregate data for bar chart
   useEffect(() => {
     const chartValues = live.reduce((acc: any, cur: any) => {
       const countryIndex = acc.findIndex(
@@ -86,228 +88,279 @@ const LiveView = () => {
     setChart(chartValues);
   }, [live]);
 
+  // Aggregate data for table
   useEffect(() => {
-    const tableValues = live.reduce((acc: any, cur: any) => {
-      const countryIndex = acc.findIndex(
-        (item: any) => item.country === cur.SentNation
-      );
-
-      if (countryIndex === -1) {
-        acc.push({
-          country: cur.SentNation,
-          company: cur.SiteName,
-          amount: currencyFormatter(cur.RecvAmt),
-          changeunit:
-            currencyFormatter(cur.SentAmt) + "(" + cur.SentCurrency + ")",
-        });
-      } else {
-        acc.push({
-          country: cur.SentNation,
-          company: cur.SiteName,
-          amount: currencyFormatter(cur.RecvAmt),
-          changeunit:
-            currencyFormatter(cur.SentAmt) + "(" + cur.SentCurrency + ")",
-        });
-      }
-      return acc;
-    }, []);
+    const tableValues = live.map((cur) => ({
+      country: cur.SentNation,
+      company: cur.SiteName,
+      amount: currencyFormatter(cur.RecvAmt),
+      changeunit: cur.SentCurrency,
+      sendAmount: currencyFormatter(cur.SentAmt) + " KRW",
+    }));
     setTable(tableValues);
   }, [live]);
 
-  const fetch = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       await getLiveView(param)
-        .then((response: any) => setLive(response.data))
+        .then((response: any) => {
+          if (response && response.data && response.data.length > 0) {
+            setLive(response.data);
+            setIsLiveApiConnected(true);
+          } else {
+            setLive(LiveScrappingData);
+            setIsLiveApiConnected(false);
+          }
+        })
         .catch((error) => {
-          console.log("error", error);
+          console.log("Live view API error, using simulation fallback:", error);
           setLive(LiveScrappingData);
+          setIsLiveApiConnected(false);
         });
-      setLoading(false);
     } catch (e) {
       console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
-    const interval = setInterval(() => {
-      // 타이머 숫자가 하나씩 줄어들도록
-      setCount((count) => count - 1);
-    }, 1000);
-    // 0이 되면 카운트가 멈춤
-    if (count === 0) {
-      setLoading(true);
-      setCount(START_SECOND);
-    }
-    if (count === 60) {
-      fetch();
-    }
-    return () => clearInterval(interval);
-    // 카운트 변수가 바뀔때마다 useEffect 실행
-  }, [count]);
-
-  useEffect(() => {
-    if (param) {
-      fetch();
+      setLive(LiveScrappingData);
+      setIsLiveApiConnected(false);
+    } finally {
+      setLoading(false);
     }
   }, [param]);
 
+  // Fetch when param changes
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // Timer countdown
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCount((prev) => {
+        if (prev <= 1) {
+          fetchData();
+          return START_SECOND;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isPaused, fetchData]);
+
+  const handleTogglePause = () => {
+    setIsPaused((prev) => !prev);
+  };
+
+  const handleManualRefresh = () => {
+    setCount(START_SECOND);
+    fetchData();
+  };
+
   return (
-    <MainWrapper>
-      <SearchBox>
-        <div className="top">
+    <Container>
+      {/* Feed Status Alert Banner */}
+      <StatusBar $isConnected={!!isLiveApiConnected}>
+        <StatusLeft>
+          {isLiveApiConnected ? (
+            <FiCheckCircle size={15} color="#10b981" />
+          ) : (
+            <FiAlertCircle size={15} color="#f59e0b" />
+          )}
+          <StatusText>
+            {isLiveApiConnected ? (
+              <FormattedMessage id="status_connected" />
+            ) : (
+              <span>
+                <FormattedMessage id="status_fallback" /> : 백엔드 API 미연결 시 사전 수집된 시뮬레이션 데이터를 자동으로 로드합니다.
+              </span>
+            )}
+          </StatusText>
+        </StatusLeft>
+        <StatusRight>
+          엔드포인트: <code>/GME/gme_scrap/pivot/history</code>
+        </StatusRight>
+      </StatusBar>
+
+      {/* Filter and Control Toolbar */}
+      <FilterBar>
+        <FilterGroup>
           <Dropdown
             defaultTitle={<FormattedMessage id="national" />}
             optionData={countries}
             currentOption={country}
             setCurrentOption={setCountry}
+            icon={<FiGlobe size={15} />}
           />
           <Dropdown
             defaultTitle={<FormattedMessage id="remit_code" />}
             optionData={remitMethods}
             currentOption={method}
-            setCurrentOption={setMethod}
+            setCurrentOption={setMethod as any}
+            icon={<FiCreditCard size={15} />}
           />
-        </div>
-        <div className="down">
-          <DateTimeWrapper>
-            <DateInput
-              defaultTitle={<FormattedMessage id="scrap_date" />}
-              searchDate={moment(live[0]?.ScrapDTTM).format("YYYY-MM-DD HH:mm")}
-            />
-          </DateTimeWrapper>
+          <DateInput
+            defaultTitle={<FormattedMessage id="scrap_date" />}
+            searchDate={
+              live[0]?.ScrapDTTM
+                ? moment(live[0].ScrapDTTM).format("YYYY-MM-DD HH:mm")
+                : moment().format("YYYY-MM-DD HH:mm")
+            }
+          />
+        </FilterGroup>
+      </FilterBar>
 
-          <Timer count={count} />
-        </div>
-      </SearchBox>
+      {/* KPI Financial Metric Cards */}
+      <FinancialMetrics
+        data={live}
+        count={count}
+        isPaused={isPaused}
+        onTogglePause={handleTogglePause}
+        onManualRefresh={handleManualRefresh}
+      />
 
-      <ContentWrapper>
-        {loading ? (
+      {/* Main Content Layout: Table & Chart */}
+      {loading ? (
+        <LoadingWrapper>
           <Loading />
-        ) : live.length > 0 ? (
-          <>
-            <TableWrapper>
-              <DataTable items={table} headers={headers} />
-            </TableWrapper>
-            <ChartWrapper>
-              {chart.map((item: View, index: number) => {
-                return (
-                  <Content key={index}>
-                    <BarChart props={item} />
-                  </Content>
-                );
-              })}
-            </ChartWrapper>
-          </>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                fontSize: 50,
-                fontWeight: "bold",
-                // alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                alignContent: "center",
-              }}
-            >
-              정보를 불러오는 중입니다...
-            </div>
-          </div>
-        )}
-      </ContentWrapper>
-    </MainWrapper>
+        </LoadingWrapper>
+      ) : live.length > 0 ? (
+        <DashboardGrid>
+          <TableColumn>
+            <DataTable items={table} />
+          </TableColumn>
+
+          <ChartColumn>
+            {chart.map((item: View, index: number) => (
+              <BarChart key={index} props={item} />
+            ))}
+          </ChartColumn>
+        </DashboardGrid>
+      ) : (
+        <EmptyStateCard>
+          <FiAlertCircle size={32} color="#f59e0b" />
+          <h3>조회된 수취 금액 데이터가 없습니다</h3>
+          <p>선택하신 조건의 수집 정보가 존재하지 않습니다. 필터 설정을 변경해 보세요.</p>
+        </EmptyStateCard>
+      )}
+    </Container>
   );
 };
+
 export default LiveView;
 
-const MainWrapper = styled.div`
+const Container = styled.div`
+  display: flex;
   flex-direction: column;
   width: 100%;
 `;
-const TableWrapper = styled.div`
-  width: 50%;
-  height: 100%;
-  padding-left: 50px;
-`;
 
-const ChartWrapper = styled.div`
-  margin: 10px 0px;
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
-  float: right;
-  display: grid;
-  grid-template-columns: 400px 400px 400px;
-  grid-gap: 30px;
-  padding-right: 50px;
-`;
-
-const Content = styled.div`
+const StatusBar = styled.div<{ $isConnected: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
   border-radius: 10px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: ${(props) =>
+    props.$isConnected ? "rgba(16, 185, 129, 0.1)" : "rgba(245, 158, 11, 0.08)"};
+  border: 1px solid
+    ${(props) =>
+      props.$isConnected ? "rgba(16, 185, 129, 0.25)" : "rgba(245, 158, 11, 0.2)"};
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 `;
 
-const SearchBox = styled.div`
-  width: 100%;
-  height: 200px;
-  border: 1px solid #dddddd;
-  border-radius: 12px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  vertical-align: middle;
-  padding-top: 30px;
-  margin-bottom: 50px;
+const StatusLeft = styled.div`
+  display: flex;
   align-items: center;
-  justify-content: center;
-  .top {
-    display: grid;
-    grid-template-columns: 0.3fr 0.3fr;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
+  gap: 10px;
+`;
+
+const StatusText = styled.span`
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f5f9;
+`;
+
+const StatusRight = styled.div`
+  font-size: 12px;
+  color: #94a3b8;
+
+  code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #cbd5e1;
   }
-  .down {
-    display: grid;
-    grid-template-columns: 0.3fr 0.3fr;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
+`;
+
+const FilterBar = styled.div`
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+`;
+
+const FilterGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+`;
+
+const DashboardGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
   }
 `;
-const DateTimeWrapper = styled.div`
-  display: flex;
+
+const TableColumn = styled.div`
   width: 100%;
-  flex-direction: row;
 `;
 
-const ContentWrapper = styled.div`
-  display: flex;
+const ChartColumn = styled.div`
   width: 100%;
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
-const ChooseSearch = styled.div`
-  /* 공통 스타일 */
+const LoadingWrapper = styled.div`
   display: flex;
-  position: relative;
-  width: 100%;
-  gap: 500px;
-  height: 50px;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  min-height: 400px;
+`;
+
+const EmptyStateCard = styled.div`
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 60px 20px;
   text-align: center;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-  font-weight: bold;
-  box-sizing: border-box;
-  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  h3 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 18px;
+  }
+
+  p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 14px;
+  }
 `;
